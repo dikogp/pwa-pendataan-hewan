@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pendataan Hewan PWA</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Aplikasi PWA untuk pendataan hewan dengan fitur barcode" />
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🐾 Pendataan Hewan</h1>
+        <p>Sistem manajemen data hewan dengan barcode</p>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="showTab('dashboard')">
+          Dashboard
+        </button>
+        <button class="nav-tab" onclick="showTab('add')">Tambah Hewan</button>
+        <button class="nav-tab" onclick="showTab('search')">Pencarian</button>
+        <button class="nav-tab" onclick="showTab('list')">Daftar Hewan</button>
+      </div>
+
+      <!-- Dashboard Tab -->
+      <div id="dashboard" class="tab-content active">
+        <h2>Dashboard</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="totalAnimals">0</div>
+            <div class="stat-label">Total Hewan</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="totalSpecies">0</div>
+            <div class="stat-label">Jenis Spesies</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="totalMale">0</div>
+            <div class="stat-label">Jantan</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="totalFemale">0</div>
+            <div class="stat-label">Betina</div>
+          </div>
+        </div>
+        <p>
+          Selamat datang di sistem pendataan hewan. Gunakan menu di atas untuk
+          mengelola data hewan Anda.
+        </p>
+      </div>
+
+      <!-- Add Animal Tab -->
+      <div id="add" class="tab-content">
+        <h2>Tambah Data Hewan</h2>
+        <form id="animalForm">
+          <div class="form-group">
+            <label for="name">Nama Hewan *</label>
+            <input type="text" id="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="species">Spesies *</label>
+            <input type="text" id="species" required />
+          </div>
+
+          <div class="form-group">
+            <label for="breed">Ras/Breed</label>
+            <input type="text" id="breed" />
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Jenis Kelamin *</label>
+            <select id="gender" required>
+              <option value="">Pilih Jenis Kelamin</option>
+              <option value="Jantan">Jantan</option>
+              <option value="Betina">Betina</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="age">Umur (bulan)</label>
+            <input type="number" id="age" min="0" />
+          </div>
+
+          <div class="form-group">
+            <label for="weight">Berat (kg)</label>
+            <input type="number" id="weight" step="0.1" min="0" />
+          </div>
+
+          <div class="form-group">
+            <label for="color">Warna</label>
+            <input type="text" id="color" />
+          </div>
+
+          <div class="form-group">
+            <label for="health">Status Kesehatan</label>
+            <select id="health">
+              <option value="">Pilih Status</option>
+              <option value="Sehat">Sehat</option>
+              <option value="Sakit">Sakit</option>
+              <option value="Pemulihan">Pemulihan</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="location">Lokasi</label>
+            <input type="text" id="location" />
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Catatan</label>
+            <textarea id="notes" rows="3"></textarea>
+          </div>
+
+          <button type="submit" class="btn">Simpan Data</button>
+          <button type="reset" class="btn btn-secondary">Reset Form</button>
+        </form>
+      </div>
+
+      <!-- Search Tab -->
+      <div id="search" class="tab-content">
+        <div class="search-header">
+          <h2>🔎 Pencarian Hewan</h2>
+          <p class="search-subtitle">
+            Temukan hewan dengan berbagai metode pencarian
+          </p>
+        </div>
+
+        <!-- Search Methods Cards -->
+        <div class="search-methods-grid">
+          <div class="search-method-card active" onclick="switchSearchMethod('text')">
+            <div class="method-icon">🔍</div>
+            <div class="method-title">Pencarian Teks</div>
+            <div class="method-description">
+              Cari berdasarkan nama, spesies, atau atribut lainnya
+            </div>
+          </div>
+          <div class="search-method-card" onclick="switchSearchMethod('id')">
+            <div class="method-icon">🏷️</div>
+            <div class="method-title">Input ID</div>
+            <div class="method-description">Cari hewan dengan ID spesifik</div>
+          </div>
+          <div class="search-method-card" onclick="switchSearchMethod('barcode')">
+            <div class="method-icon">📱</div>
+            <div class="method-title">Scan Barcode</div>
+            <div class="method-description">
+              Gunakan kamera atau input manual
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Containers -->
+        <div class="search-content">
+          <!-- Text Search -->
+          <div id="textSearch" class="search-container active">
+            <div class="search-input-wrapper">
+              <div class="search-input-container">
+                <div class="search-icon-wrapper">
+                  <span class="search-icon">🔍</span>
+                </div>
+                <input
+                  type="text"
+                  id="searchInput"
+                  placeholder="Ketik nama hewan, spesies, ras, lokasi, atau warna..."
+                  class="modern-input"
+                />
+                <div class="search-clear" onclick="clearSearch()" style="display: none">
+                  ✕
+                </div>
+              </div>
+              <div class="search-suggestions">
+                <span class="suggestion-label">Saran pencarian:</span>
+                <div class="suggestion-tags">
+                  <span class="suggestion-tag" onclick="quickSearch('kucing')">Kucing</span>
+                  <span class="suggestion-tag" onclick="quickSearch('anjing')">Anjing</span>
+                  <span class="suggestion-tag" onclick="quickSearch('sehat')">Status Sehat</span>
+                  <span class="suggestion-tag" onclick="quickSearch('jantan')">Jantan</span>
+                  <span class="suggestion-tag" onclick="quickSearch('betina')">Betina</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ID Search -->
+          <div id="idSearch" class="search-container">
+            <div class="search-input-wrapper">
+              <div class="id-search-card">
+                <div class="card-header">
+                  <h3>🏷️ Pencarian berdasarkan ID</h3>
+                  <p>Masukkan ID unik hewan untuk pencarian cepat</p>
+                </div>
+                <div class="search-input-container">
+                  <div class="search-icon-wrapper">
+                    <span class="search-icon">🏷️</span>
+                  </div>
+                  <input
+                    type="number"
+                    id="idInput"
+                    placeholder="Contoh: 1, 2, 3..."
+                    class="modern-input"
+                    min="1"
+                  />
+                  <button class="search-btn" onclick="searchById()">
+                    <span>Cari</span>
+                    <div class="btn-ripple"></div>
+                  </button>
+                </div>
+                <div class="id-examples">
+                  <span class="example-label">ID Terakhir:</span>
+                  <span class="example-id" id="lastIdExample">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barcode Scanner -->
+          <div id="barcodeSearch" class="search-container">
+            <div class="search-input-wrapper">
+              <div class="barcode-scanner-card">
+                <div class="card-header">
+                  <h3>📱 Scanner Barcode</h3>
+                  <p>Scan barcode atau masukkan kode secara manual</p>
+                </div>
+
+                <!-- Camera Scanner Section -->
+                <div class="scanner-section">
+                  <div class="scanner-controls">
+                    <button class="scanner-btn primary" onclick="startBarcodeScanner()">
+                      <span class="btn-icon">📷</span>
+                      <span>Mulai Scan Kamera</span>
+                    </button>
+                    <button class="scanner-btn secondary" onclick="stopBarcodeScanner()">
+                      <span class="btn-icon">⏹️</span>
+                      <span>Stop Scanner</span>
+                    </button>
+                  </div>
+
+                  <div id="scannerContainer" class="scanner-viewport">
+                    <div class="scanner-frame">
+                      <video id="video" autoplay playsinline></video>
+                      <div class="scanner-overlay">
+                        <div class="scanner-line"></div>
+                        <div class="scanner-corners">
+                          <div class="corner top-left"></div>
+                          <div class="corner top-right"></div>
+                          <div class="corner bottom-left"></div>
+                          <div class="corner bottom-right"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <canvas id="canvas" style="display: none"></canvas>
+                    <p class="scanner-instruction">
+                      Arahkan kamera ke barcode dan tunggu hingga terdeteksi
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Scan Result -->
+                <div id="scanResult" class="scan-result-card"></div>
+
+                <!-- Manual Input Section -->
+                <div class="manual-input-section">
+                  <div class="section-divider">
+                    <span class="divider-text">atau</span>
+                  </div>
+
+                  <div class="manual-input-card">
+                    <h4>📊 Input Manual Barcode</h4>
+                    <div class="search-input-container">
+                      <div class="search-icon-wrapper">
+                        <span class="search-icon">📊</span>
+                      </div>
+                      <input
+                        type="text"
+                        id="barcodeInput"
+                        placeholder="Masukkan 8 digit kode barcode..."
+                        class="modern-input"
+                        maxlength="8"
+                      />
+                      <button class="search-btn" onclick="searchByBarcode()">
+                        <span>Cari</span>
+                        <div class="btn-ripple"></div>
+                      </button>
+                    </div>
+                    <div class="barcode-examples">
+                      <span class="example-label">Format:</span>
+                      <span class="example-code">00000001</span>
+                      <span class="example-code">00000023</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Results -->
+        <div id="searchResults" class="search-results-container"></div>
+      </div>
+
+      <!-- List Tab -->
+      <div id="list" class="tab-content">
+        <h2>Daftar Semua Hewan</h2>
+        <div id="animalList"></div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
