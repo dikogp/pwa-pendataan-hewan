@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluasi Kinerja - Pendataan Hewan PWA</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />`n    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Evaluasi dan analisis kinerja peternakan secara menyeluruh" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header with Navigation -->
+      <div class="header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1>🐾 Pendataan Hewan</h1>
+            <p>Evaluasi Kinerja Peternakan</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+            <a href="profil.html" class="btn btn-info">👤 Profil</a>
+            <a href="../index.html" class="btn btn-secondary">🏠 Home</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="nav-link active">📋 Evaluasi</a>
+          <a href="search.html" class="nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="nav-link">📄 Daftar</a>
+          <a href="profil.html" class="nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-content">
+          <a href="dashboard.html" class="mobile-nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="mobile-nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="mobile-nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="mobile-nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="mobile-nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="mobile-nav-link active">📋 Evaluasi</a>
+          <a href="search.html" class="mobile-nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="mobile-nav-link">📄 Daftar</a>
+          <a href="profil.html" class="mobile-nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="module-header">
+          <h2>📋 Evaluasi Kinerja Peternakan</h2>
+          <p>Analisis menyeluruh untuk optimalisasi bisnis peternakan</p>
+        </div>
+
+        <div class="evaluation-section">
+          <!-- Evaluation Tabs -->
+          <div class="tabs">
+            <button class="tab-button active" onclick="showTab('performance')">📊 Kinerja Hewan</button>
+            <button class="tab-button" onclick="showTab('productivity')">📈 Produktivitas</button>
+            <button class="tab-button" onclick="showTab('health')">🏥 Kesehatan</button>
+            <button class="tab-button" onclick="showTab('financial')">💰 Finansial</button>
+            <button class="tab-button" onclick="showTab('recommendations')">💡 Rekomendasi</button>
+          </div>
+
+          <!-- Performance Evaluation Tab -->
+          <div id="performance" class="tab-content active">
+            <h3>📊 Evaluasi Kinerja Individual</h3>
+            
+            <div class="animal-selector-section">
+              <div class="form-group">
+                <label for="selectAnimalEvaluation">Pilih Hewan untuk Evaluasi:</label>
+                <select id="selectAnimalEvaluation" onchange="loadAnimalPerformance()">
+                  <option value="">-- Pilih Hewan --</option>
+                  <!-- Will be populated by JavaScript -->
+                </select>
+              </div>
+            </div>
+
+            <div class="performance-metrics">
+              <h4>📈 Metrik Kinerja</h4>
+              <div id="performanceCards" class="metrics-grid">
+                <!-- Performance metrics will be shown here -->
+              </div>
+            </div>
+
+            <div class="performance-trends">
+              <h4>📉 Tren Kinerja (6 Bulan Terakhir)</h4>
+              <canvas id="performanceChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="performance-ranking">
+              <h4>🏆 Peringkat Kinerja</h4>
+              <div id="animalRanking" class="ranking-list">
+                <!-- Animal ranking will be shown here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Productivity Analysis Tab -->
+          <div id="productivity" class="tab-content">
+            <h3>📈 Analisis Produktivitas</h3>
+            
+            <div class="productivity-overview">
+              <h4>📊 Overview Produktivitas</h4>
+              <div class="productivity-summary">
+                <div class="summary-card">
+                  <h5>🥛 Produksi Total Bulan Ini</h5>
+                  <div class="summary-value" id="totalProduction">0 Liter</div>
+                  <div class="summary-change" id="productionChange">+0%</div>
+                </div>
+                <div class="summary-card">
+                  <h5>📈 Rata-rata Harian</h5>
+                  <div class="summary-value" id="avgDaily">0 Liter/hari</div>
+                  <div class="summary-change" id="dailyChange">+0%</div>
+                </div>
+                <div class="summary-card">
+                  <h5">🎯 Target Achievement</h5>
+                  <div class="summary-value" id="targetAchievement">0%</div>
+                  <div class="summary-change" id="targetStatus">Target</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="productivity-analysis">
+              <div class="analysis-section">
+                <h4>📊 Analisis per Kategori</h4>
+                <canvas id="productivityChart" width="400" height="200"></canvas>
+              </div>
+              
+              <div class="efficiency-metrics">
+                <h4>⚡ Metrik Efisiensi</h4>
+                <div id="efficiencyMetrics" class="efficiency-cards">
+                  <!-- Efficiency metrics will be shown here -->
+                </div>
+              </div>
+            </div>
+
+            <div class="productivity-forecast">
+              <h4>🔮 Proyeksi Produktivitas</h4>
+              <canvas id="forecastChart" width="400" height="200"></canvas>
+            </div>
+          </div>
+
+          <!-- Health Evaluation Tab -->
+          <div id="health" class="tab-content">
+            <h3>🏥 Evaluasi Kesehatan Populasi</h3>
+            
+            <div class="health-dashboard">
+              <div class="health-overview">
+                <div class="health-card">
+                  <h5>💚 Hewan Sehat</h5>
+                  <div class="health-value" id="healthyAnimals">0</div>
+                  <div class="health-percentage" id="healthyPercentage">0%</div>
+                </div>
+                <div class="health-card">
+                  <h5>⚠️ Perlu Perhatian</h5>
+                  <div class="health-value" id="cautionAnimals">0</div>
+                  <div class="health-percentage" id="cautionPercentage">0%</div>
+                </div>
+                <div class="health-card">
+                  <h5">🚨 Butuh Perawatan</h5>
+                  <div class="health-value" id="criticalAnimals">0</div>
+                  <div class="health-percentage" id="criticalPercentage">0%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="health-trends">
+              <h4>📈 Tren Kesehatan</h4>
+              <canvas id="healthTrendChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="disease-analysis">
+              <h4>🦠 Analisis Penyakit</h4>
+              <div id="diseaseStats" class="disease-stats">
+                <!-- Disease statistics will be shown here -->
+              </div>
+            </div>
+
+            <div class="vaccination-schedule">
+              <h4>💉 Status Vaksinasi</h4>
+              <div id="vaccinationStatus" class="vaccination-grid">
+                <!-- Vaccination status will be shown here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Financial Analysis Tab -->
+          <div id="financial" class="tab-content">
+            <h3>💰 Analisis Finansial Komprehensif</h3>
+            
+            <div class="financial-overview">
+              <div class="financial-summary">
+                <div class="finance-card">
+                  <h5>💵 Total Pendapatan</h5>
+                  <div class="finance-value" id="totalRevenue">Rp 0</div>
+                  <div class="finance-period">Bulan ini</div>
+                </div>
+                <div class="finance-card">
+                  <h5">💸 Total Pengeluaran</h5>
+                  <div class="finance-value" id="totalExpenses">Rp 0</div>
+                  <div class="finance-period">Bulan ini</div>
+                </div>
+                <div class="finance-card">
+                  <h5>📈 Keuntungan Bersih</h5>
+                  <div class="finance-value" id="netProfit">Rp 0</div>
+                  <div class="finance-period">Bulan ini</div>
+                </div>
+                <div class="finance-card">
+                  <h5">📊 ROI</h5>
+                  <div class="finance-value" id="roi">0%</div>
+                  <div class="finance-period">Year to Date</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="financial-charts">
+              <div class="chart-section">
+                <h4>📊 Breakdown Pendapatan</h4>
+                <canvas id="revenueChart" width="400" height="200"></canvas>
+              </div>
+              
+              <div class="chart-section">
+                <h4>📉 Breakdown Pengeluaran</h4>
+                <canvas id="expenseChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+
+            <div class="cost-analysis">
+              <h4>💡 Analisis Biaya per Hewan</h4>
+              <div id="costPerAnimal" class="cost-breakdown">
+                <!-- Cost analysis will be shown here -->
+              </div>
+            </div>
+
+            <div class="profitability-analysis">
+              <h4>📈 Analisis Profitabilitas</h4>
+              <canvas id="profitabilityChart" width="400" height="200"></canvas>
+            </div>
+          </div>
+
+          <!-- Recommendations Tab -->
+          <div id="recommendations" class="tab-content">
+            <h3>💡 Rekomendasi & Insights</h3>
+            
+            <div class="recommendations-section">
+              <div class="priority-recommendations">
+                <h4>🔥 Rekomendasi Prioritas Tinggi</h4>
+                <div id="highPriorityRecs" class="recommendations-list">
+                  <!-- High priority recommendations will be shown here -->
+                </div>
+              </div>
+
+              <div class="operational-recommendations">
+                <h4>⚙️ Perbaikan Operasional</h4>
+                <div id="operationalRecs" class="recommendations-list">
+                  <!-- Operational recommendations will be shown here -->
+                </div>
+              </div>
+
+              <div class="financial-recommendations">
+                <h4">💰 Optimalisasi Finansial</h4>
+                <div id="financialRecs" class="recommendations-list">
+                  <!-- Financial recommendations will be shown here -->
+                </div>
+              </div>
+
+              <div class="growth-opportunities">
+                <h4>🚀 Peluang Pengembangan</h4>
+                <div id="growthOpportunities" class="opportunities-list">
+                  <!-- Growth opportunities will be shown here -->
+                </div>
+              </div>
+            </div>
+
+            <div class="action-plan">
+              <h4">📋 Rencana Aksi</h4>
+              <div class="action-items">
+                <div id="actionPlan" class="action-list">
+                  <!-- Action plan will be shown here -->
+                </div>
+              </div>
+              
+              <div class="plan-actions">
+                <button class="btn btn-primary" onclick="generateActionPlan()">
+                  📋 Generate Rencana Aksi
+                </button>
+                <button class="btn btn-secondary" onclick="exportEvaluationReport()">
+                  📤 Export Laporan Evaluasi
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Pendataan Hewan PWA. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/error-handler.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobileNav');
+        if (mobileNav) {
+          mobileNav.classList.toggle('active');
+        }
+      }
+
+      // Tab functionality
+      function showTab(tabName) {
+        // Hide all tab contents
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        // Remove active class from all buttons
+        const tabButtons = document.querySelectorAll('.tab-button');
+        tabButtons.forEach(button => button.classList.remove('active'));
+        
+        // Show selected tab content
+        const selectedTab = document.getElementById(tabName);
+        if (selectedTab) {
+          selectedTab.classList.add('active');
+        }
+        
+        // Add active class to clicked button
+        event.target.classList.add('active');
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const mobileNav = document.getElementById('mobileNav');
+        const menuBtn = document.querySelector('.btn-menu');
+        
+        if (mobileNav && menuBtn && !mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+          mobileNav.classList.remove('active');
+        }
+      });
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication
+        if (typeof auth !== 'undefined' && !auth.requireAuth()) {
+          return; // Will redirect to login if not authenticated
+        }
+        
+        if (typeof loadEvaluationData === 'function') {
+          loadEvaluationData();
+        }
+      });
+    </script>
+  </body>
+</html>

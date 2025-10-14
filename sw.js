@@ -1,4 +1,4 @@
-const CACHE_NAME = "hewanku-super-app-v2";
+const CACHE_NAME = "hewanku-super-app-v6";
 const urlsToCache = [
   "/",
   "/index.html",
@@ -6,6 +6,18 @@ const urlsToCache = [
   "/assets/css/style.css",
   "/assets/js/app.js",
   "/assets/js/utils.js",
+  "/assets/js/auth.js",
+  "/assets/js/error-handler.js",
+  "/pages/dashboard.html",
+  "/pages/pendataan.html",
+  "/pages/perawatan.html",
+  "/pages/monitoring.html",
+  "/pages/panen.html",
+  "/pages/evaluasi.html",
+  "/pages/search.html",
+  "/pages/list.html",
+  "/pages/profil.html",
+  "/pages/login.html",
   "https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js",
   "https://cdn.jsdelivr.net/npm/chart.js",
 ];
@@ -52,6 +64,17 @@ self.addEventListener("activate", function (event) {
 
 // Fetch event
 self.addEventListener("fetch", function (event) {
+  // Skip chrome-extension, moz-extension, and other extension requests
+  if (event.request.url.startsWith('chrome-extension://') || 
+      event.request.url.startsWith('moz-extension://') ||
+      event.request.url.startsWith('safari-extension://') ||
+      event.request.url.includes('adblock') ||
+      event.request.url.includes('counter.js') ||
+      event.request.url.includes('FingerPrint') ||
+      event.request.url.includes('Ex.js')) {
+    return;
+  }
+
   event.respondWith(
     caches
       .match(event.request)

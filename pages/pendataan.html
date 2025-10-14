@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pendataan Hewan - Pendataan Hewan PWA</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />`n    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Registrasi dan manajemen data hewan ternak yang komprehensif" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header with Navigation -->
+      <div class="header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1>🐾 Pendataan Hewan</h1>
+            <p>Registrasi dan manajemen data hewan ternak</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+            <a href="profil.html" class="btn btn-info">👤 Profil</a>
+            <a href="../index.html" class="btn btn-secondary">🏠 Home</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="nav-link active">📝 Pendataan</a>
+          <a href="perawatan.html" class="nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="nav-link">📄 Daftar</a>
+          <a href="profil.html" class="nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-content">
+          <a href="dashboard.html" class="mobile-nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="mobile-nav-link active">📝 Pendataan</a>
+          <a href="perawatan.html" class="mobile-nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="mobile-nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="mobile-nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="mobile-nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="mobile-nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="mobile-nav-link">📄 Daftar</a>
+          <a href="profil.html" class="mobile-nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="card">
+          <div class="card-header">
+            <h2>📝 Pendataan Hewan</h2>
+            <p>Registrasi dan manajemen data hewan ternak yang komprehensif</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="btn-group tab-buttons">
+              <button class="btn btn-primary active" onclick="showSubTab('registrasi')">
+                ➕ Registrasi Hewan Baru
+              </button>
+              <button class="btn btn-outline-primary" onclick="showSubTab('manajemen')">
+                📋 Manajemen Data
+              </button>
+              <button class="btn btn-outline-primary" onclick="showSubTab('pencarian')">
+                🔍 Pencarian & Filter
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Registrasi Sub Tab -->
+        <div id="registrasi" class="sub-content active">
+          <!-- Identifikasi Section -->
+          <div class="card">
+            <div class="card-header">
+              <h3>🏷️ Identifikasi Hewan</h3>
+            </div>
+            <div class="card-body">
+              <form id="animalForm" class="form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="animalId">ID Hewan (Auto Generated)</label>
+                    <input type="text" id="animalId" class="form-control" readonly />
+                  </div>
+                  <div class="form-group">
+                    <label for="qrCode">QR Code</label>
+                    <div class="input-group">
+                      <button type="button" onclick="generateQRCode()" class="btn btn-secondary">
+                        📱 Generate QR
+                      </button>
+                      <div id="qrDisplay" class="qr-display"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="name">Nama Hewan *</label>
+                    <input type="text" id="name" class="form-control" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="species">Spesies *</label>
+                    <select id="species" class="form-control" required>
+                      <option value="">Pilih Spesies</option>
+                      <option value="Sapi">Sapi</option>
+                      <option value="Kambing">Kambing</option>
+                      <option value="Domba">Domba</option>
+                      <option value="Ayam">Ayam</option>
+                      <option value="Bebek">Bebek</option>
+                      <option value="Lainnya">Lainnya</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="breed">Ras/Breed</label>
+                    <input type="text" id="breed" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <label for="gender">Jenis Kelamin *</label>
+                    <select id="gender" class="form-control" required>
+                      <option value="">Pilih Jenis Kelamin</option>
+                      <option value="Jantan">Jantan</option>
+                      <option value="Betina">Betina</option>
+                    </select>
+                  </div>
+                </div>
+              
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="birthDate">Tanggal Lahir</label>
+                    <input type="date" id="birthDate" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <label for="age">Umur (bulan)</label>
+                    <input type="number" id="age" class="form-control" min="0" />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="weight">Berat Awal (kg)</label>
+                    <input type="number" id="weight" step="0.1" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label for="height">Tinggi (cm)</label>
+                    <input type="number" id="height" step="0.1" min="0" />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="color">Warna Dominan</label>
+                    <input type="text" id="color" />
+                  </div>
+                  <div class="form-group">
+                    <label for="location">Lokasi Kandang</label>
+                    <input type="text" id="location" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="notes">Catatan Tambahan</label>
+                  <textarea id="notes" rows="4" placeholder="Catatan khusus, riwayat kesehatan awal, dll"></textarea>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">
+                    💾 Simpan Data Hewan
+                  </button>
+                  <button type="reset" class="btn btn-secondary">
+                    🔄 Reset Form
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manajemen Data Sub Tab -->
+        <div id="manajemen" class="sub-content">
+          <div class="data-management">
+            <div class="management-actions">
+              <button class="btn btn-info" onclick="exportAllData()">
+                📤 Export Data
+              </button>
+              <button class="btn btn-success" onclick="importData()">
+                📥 Import Data
+              </button>
+              <button class="btn btn-warning" onclick="printAnimalList()">
+                🖨️ Print Laporan
+              </button>
+            </div>
+            
+            <div class="data-overview">
+              <h3>📊 Ringkasan Data</h3>
+              <div id="dataOverview" class="overview-cards">
+                <!-- Will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pencarian Sub Tab -->
+        <div id="pencarian" class="sub-content">
+          <div class="advanced-search">
+            <h3>🔍 Pencarian & Filter Lanjut</h3>
+            
+            <!-- Search akan menggunakan modul yang sudah ada -->
+            <div class="search-placeholder">
+              <p>Gunakan halaman <strong>🔍 Pencarian</strong> untuk fitur pencarian yang lebih lengkap</p>
+              <a href="search.html" class="btn">
+                🔍 Buka Halaman Pencarian
+              </a>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Pendataan Hewan PWA. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/error-handler.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobileNav');
+        if (mobileNav) {
+          mobileNav.classList.toggle('active');
+        }
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const mobileNav = document.getElementById('mobileNav');
+        const menuBtn = document.querySelector('.btn-menu');
+        
+        if (mobileNav && menuBtn && !mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+          mobileNav.classList.remove('active');
+        }
+      });
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication
+        if (typeof auth !== 'undefined' && !auth.requireAuth()) {
+          return; // Will redirect to login if not authenticated
+        }
+        
+        showSubTab('registrasi');
+        if (typeof generateAnimalId === 'function') {
+          generateAnimalId();
+        }
+      });
+    </script>
+  </body>
+</html>

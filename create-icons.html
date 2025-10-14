@@ -1,0 +1,57 @@
+<!-- Simple HTML to create and download icons -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Creator</title>
+</head>
+<body>
+    <h3>PWA Icon Creator</h3>
+    <canvas id="canvas" width="192" height="192" style="border: 1px solid #ccc;"></canvas>
+    <br><br>
+    <button onclick="createIcon(144)">Create 144x144 Icon</button>
+    <button onclick="createIcon(192)">Create 192x192 Icon</button>
+    <br><br>
+    <div id="links"></div>
+
+    <script>
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Blue background
+            ctx.fillStyle = '#4F46E5';
+            ctx.fillRect(0, 0, size, size);
+            
+            // White text "PH" for Pendataan Hewan
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${Math.floor(size * 0.4)}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('PH', size/2, size/2);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.textContent = `Download icon-${size}.png`;
+            link.style.display = 'block';
+            link.style.marginBottom = '10px';
+            
+            document.getElementById('links').appendChild(link);
+            
+            // Also show in main canvas if it's 192
+            if (size === 192) {
+                const mainCanvas = document.getElementById('canvas');
+                const mainCtx = mainCanvas.getContext('2d');
+                mainCtx.drawImage(canvas, 0, 0);
+            }
+        }
+        
+        // Create initial icon
+        createIcon(192);
+        createIcon(144);
+    </script>
+</body>
+</html>

@@ -4,899 +4,964 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pendataan Hewan PWA</title>
-    <!-- Tambahkan setelah meta tags -->
+
+    <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
-    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#4F46E5" />
     <meta
       name="description"
       content="Aplikasi PWA untuk pendataan hewan dengan fitur barcode"
     />
-    <link
-      rel="manifest"
-      href="data:application/json;base64,eyJuYW1lIjoiUGVuZGF0YWFuIEhld2FuIFBXQSIsInNob3J0X25hbWUiOiJIZXdhblBXQSIsImRlc2NyaXB0aW9uIjoiQXBsaWthc2kgUFdBIHVudHVrIHBlbmRhdGFhbiBoZXdhbiIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmZmZmZmIiwidGhlbWVfY29sb3IiOiIjNEY0NkU1IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaVpEUWlJR2hsYVdkb2REMGlaRFFpSUhabGNuTnBiMjQ5SWpFdU1TNHhJaUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lQaUE4Y0dGMGFDQmtQU0p0TVRCb05VRXhNR013TFRVdU5EQjJNalUySURVdU5EQXROUzQwTURoaE5TNDFPQ0ExTGpVNElEQXdNUzQxTVMwM0xqWXhNamt1T0RCaWFqUXVOemdnTkM0M09IcE5MVEp6TmpCd01UWmhPQzR3Tmlnd0xqQXhMakF6TGpBN05DNHdPU0F6TGpBNU5pNHpOeTR5TmpOc05UQXdOaTQyTmpoYU0yWjJOREl1TWpjM1lURXVOelExTVM0M05EVXpNVGt1TnpFNE1UazNMamt6Tm5rM0xqa3pMalkwTm1zek9EUXRNVEl1T1RZek1qUXRNVGt1TnpFNEluOCtQQzl6ZG1jKyIsInNpemVzIjoiNjR4NjQiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0="
-    />
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        color: #333;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-
-      .header {
-        text-align: center;
-        margin-bottom: 30px;
-        color: white;
-      }
-
-      .header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      }
-
-      .nav-tabs {
-        display: flex;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        padding: 5px;
-        margin-bottom: 30px;
-        backdrop-filter: blur(10px);
-      }
-
-      .nav-tab {
-        flex: 1;
-        padding: 12px 20px;
-        background: transparent;
-        border: none;
-        color: white;
-        cursor: pointer;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        font-weight: 500;
-      }
-
-      .nav-tab.active {
-        background: white;
-        color: #667eea;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      .tab-content {
-        display: none;
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(10px);
-      }
-
-      .tab-content.active {
-        display: block;
-        animation: fadeIn 0.3s ease;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .form-group {
-        margin-bottom: 20px;
-      }
-
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #555;
-      }
-
-      .form-group input,
-      .form-group select,
-      .form-group textarea {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e1e5e9;
-        border-radius: 10px;
-        font-size: 16px;
-        transition: border-color 0.3s ease;
-      }
-
-      .form-group input:focus,
-      .form-group select:focus,
-      .form-group textarea:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      }
-
-      .btn {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 12px 30px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: 600;
-        transition: transform 0.2s ease;
-        margin-right: 10px;
-        margin-bottom: 10px;
-      }
-
-      .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-      }
-
-      .btn-secondary {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      }
-
-      .search-box {
-        position: relative;
-        margin-bottom: 20px;
-      }
-
-      .search-box input {
-        padding-left: 50px;
-      }
-
-      .search-icon {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #999;
-      }
-
-      .animal-card {
-        background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
-        border-radius: 15px;
-        padding: 20px;
-        margin-bottom: 15px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease;
-      }
-
-      .animal-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      }
-
-      .animal-header {
-        display: flex;
-        justify-content: between;
-        align-items: center;
-        margin-bottom: 15px;
-      }
-
-      .animal-name {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #667eea;
-      }
-
-      .animal-species {
-        color: #666;
-        font-size: 1.1rem;
-      }
-
-      .animal-info {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-        margin-bottom: 15px;
-      }
-
-      .info-item {
-        background: rgba(102, 126, 234, 0.1);
-        padding: 10px 15px;
-        border-radius: 8px;
-      }
-
-      .info-label {
-        font-weight: 600;
-        color: #555;
-      }
-
-      .info-value {
-        color: #333;
-        margin-top: 5px;
-      }
-
-      .barcode-container {
-        text-align: center;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        margin-top: 15px;
-      }
-
-      .no-data {
-        text-align: center;
-        padding: 40px;
-        color: #666;
-      }
-
-      /* Enhanced Search Styles */
-      .search-header {
-        text-align: center;
-        margin-bottom: 30px;
-      }
-
-      .search-header h2 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .search-subtitle {
-        color: #666;
-        font-size: 1.1rem;
-      }
-
-      .search-methods-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
-      }
-
-      .search-method-card {
-        background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-        border: 2px solid #e1e5e9;
-        border-radius: 20px;
-        padding: 25px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .search-method-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(102, 126, 234, 0.1),
-          transparent
-        );
-        transition: left 0.5s ease;
-      }
-
-      .search-method-card:hover::before {
-        left: 100%;
-      }
-
-      .search-method-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
-        border-color: #667eea;
-      }
-
-      .search-method-card.active {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-color: #667eea;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-      }
-
-      .method-icon {
-        font-size: 3rem;
-        margin-bottom: 15px;
-        display: block;
-      }
-
-      .method-title {
-        font-size: 1.3rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-      }
-
-      .method-description {
-        font-size: 0.9rem;
-        opacity: 0.8;
-        line-height: 1.4;
-      }
-
-      .search-content {
-        margin-bottom: 30px;
-      }
-
-      .search-container {
-        display: none;
-        animation: slideIn 0.3s ease;
-      }
-
-      .search-container.active {
-        display: block;
-      }
-
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .search-input-wrapper {
-        background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-      }
-
-      .search-input-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .search-icon-wrapper {
-        position: absolute;
-        left: 20px;
-        z-index: 2;
-        font-size: 1.2rem;
-      }
-
-      .modern-input {
-        flex: 1;
-        padding: 18px 20px 18px 60px;
-        border: none;
-        border-radius: 15px;
-        font-size: 16px;
-        background: white;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-      }
-
-      .modern-input:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2),
-          0 4px 20px rgba(0, 0, 0, 0.15);
-        transform: translateY(-2px);
-      }
-
-      .search-clear {
-        position: absolute;
-        right: 20px;
-        cursor: pointer;
-        background: #f1f3f4;
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        transition: all 0.2s ease;
-      }
-
-      .search-clear:hover {
-        background: #e8eaed;
-        transform: scale(1.1);
-      }
-
-      .search-btn {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        padding: 18px 30px;
-        border-radius: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s ease;
-      }
-
-      .search-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-      }
-
-      .btn-ripple {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        transform: translate(-50%, -50%);
-        transition: width 0.3s ease, height 0.3s ease;
-      }
-
-      .search-btn:active .btn-ripple {
-        width: 100px;
-        height: 100px;
-      }
-
-      .search-suggestions {
-        margin-top: 20px;
-        text-align: center;
-      }
-
-      .suggestion-label {
-        color: #666;
-        font-size: 0.9rem;
-        margin-bottom: 10px;
-        display: block;
-      }
-
-      .suggestion-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        justify-content: center;
-      }
-
-      .suggestion-tag {
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
-        padding: 8px 15px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .suggestion-tag:hover {
-        background: #667eea;
-        color: white;
-        transform: translateY(-2px);
-      }
-
-      .id-search-card,
-      .barcode-scanner-card {
-        background: white;
-        border-radius: 20px;
-        overflow: hidden;
-      }
-
-      .card-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 25px;
-        text-align: center;
-      }
-
-      .card-header h3 {
-        margin-bottom: 8px;
-        font-size: 1.5rem;
-      }
-
-      .card-header p {
-        opacity: 0.9;
-        font-size: 1rem;
-      }
-
-      .id-examples,
-      .barcode-examples {
-        margin-top: 15px;
-        text-align: center;
-        color: #666;
-      }
-
-      .example-label {
-        font-weight: 600;
-        margin-right: 10px;
-      }
-
-      .example-id,
-      .example-code {
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
-        padding: 4px 10px;
-        border-radius: 8px;
-        font-family: monospace;
-        margin: 0 5px;
-      }
-
-      .scanner-section {
-        padding: 25px;
-      }
-
-      .scanner-controls {
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-      }
-
-      .scanner-btn {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 15px 25px;
-        border: none;
-        border-radius: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .scanner-btn.primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-      }
-
-      .scanner-btn.secondary {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-      }
-
-      .scanner-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .scanner-viewport {
-        display: none;
-        margin: 20px 0;
-      }
-
-      .scanner-frame {
-        position: relative;
-        max-width: 400px;
-        margin: 0 auto;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-      }
-
-      #video {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-        background: #000;
-      }
-
-      .scanner-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .scanner-line {
-        width: 80%;
-        height: 2px;
-        background: #00ff00;
-        box-shadow: 0 0 10px #00ff00;
-        animation: scanLine 2s linear infinite;
-      }
-
-      @keyframes scanLine {
-        0%,
-        100% {
-          opacity: 0;
-        }
-        50% {
-          opacity: 1;
-        }
-      }
-
-      .scanner-corners {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        right: 20px;
-        bottom: 20px;
-      }
-
-      .corner {
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        border: 3px solid #00ff00;
-      }
-
-      .corner.top-left {
-        top: 0;
-        left: 0;
-        border-right: none;
-        border-bottom: none;
-      }
-
-      .corner.top-right {
-        top: 0;
-        right: 0;
-        border-left: none;
-        border-bottom: none;
-      }
-
-      .corner.bottom-left {
-        bottom: 0;
-        left: 0;
-        border-right: none;
-        border-top: none;
-      }
-
-      .corner.bottom-right {
-        bottom: 0;
-        right: 0;
-        border-left: none;
-        border-top: none;
-      }
-
-      .scanner-instruction {
-        text-align: center;
-        margin-top: 15px;
-        color: #666;
-        font-style: italic;
-      }
-
-      .scan-result-card {
-        display: none;
-        margin: 20px 25px;
-        padding: 20px;
-        border-radius: 15px;
-        text-align: center;
-      }
-
-      .section-divider {
-        position: relative;
-        text-align: center;
-        margin: 30px 0;
-      }
-
-      .section-divider::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: #e1e5e9;
-      }
-
-      .divider-text {
-        background: white;
-        padding: 0 20px;
-        color: #666;
-        font-weight: 600;
-        position: relative;
-      }
-
-      .manual-input-section {
-        padding: 0 25px 25px;
-      }
-
-      .manual-input-card h4 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-      }
-
-      .search-results-container {
-        margin-top: 30px;
-      }
-
-      @media (max-width: 768px) {
-        .search-methods-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .scanner-controls {
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .scanner-btn {
-          width: 100%;
-          max-width: 250px;
-        }
-
-        .suggestion-tags {
-          justify-content: flex-start;
-        }
-      }
-
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
-      }
-
-      .stat-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 25px;
-        border-radius: 15px;
-        text-align: center;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-      }
-
-      .stat-number {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 5px;
-      }
-
-      .stat-label {
-        font-size: 1rem;
-        opacity: 0.9;
-      }
-
-      @media (max-width: 768px) {
-        .container {
-          padding: 15px;
-        }
-
-        .header h1 {
-          font-size: 2rem;
-        }
-
-        .nav-tabs {
-          flex-direction: column;
-        }
-
-        .nav-tab {
-          margin-bottom: 5px;
-        }
-
-        .animal-info {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
-    <div class="container">
-      <div class="header">
-        <h1>🐾 Pendataan Hewan</h1>
-        <p>Sistem manajemen data hewan dengan barcode</p>
+    <div class="loading-screen">
+      <div class="loader">
+        <div class="spinner"></div>
+        <h2>🐾 Pendataan Hewan PWA</h2>
+        <p>Memuat aplikasi...</p>
       </div>
+    </div>
 
-      <div class="nav-tabs">
+    <script>
+      // Check if user is logged in
+      const currentUser = localStorage.getItem('currentUser');
+      
+      // Redirect based on auth status
+      if (currentUser) {
+        // User is logged in, redirect to dashboard
+        window.location.href = '/pages/dashboard.html';
+      } else {
+        // User not logged in, redirect to login
+        window.location.href = '/pages/login.html';
+      }
+    </script>
+  </body>
+</html>
         <button class="nav-tab active" onclick="showTab('dashboard')">
-          Dashboard
+          📊 Dashboard
         </button>
-        <button class="nav-tab" onclick="showTab('add')">Tambah Hewan</button>
-        <button class="nav-tab" onclick="showTab('search')">Pencarian</button>
-        <button class="nav-tab" onclick="showTab('list')">Daftar Hewan</button>
+        <button class="nav-tab" onclick="showTab('pendataan')">
+          📝 Pendataan
+        </button>
+        <button class="nav-tab" onclick="showTab('perawatan')">
+          🏥 Perawatan
+        </button>
+        <button class="nav-tab" onclick="showTab('monitoring')">
+          📈 Monitoring
+        </button>
+        <button class="nav-tab" onclick="showTab('panen')">
+          🌾 Panen
+        </button>
+        <button class="nav-tab" onclick="showTab('evaluasi')">
+          📋 Evaluasi
+        </button>
       </div>
 
       <!-- Dashboard Tab -->
       <div id="dashboard" class="tab-content active">
-        <h2>Dashboard</h2>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-number" id="totalAnimals">0</div>
-            <div class="stat-label">Total Hewan</div>
+        <div class="dashboard-header">
+          <h2>🏠 Dashboard KPI Peternakan</h2>
+          <p>Pantau performa peternakan Anda secara real-time</p>
+        </div>
+        
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card primary">
+            <div class="kpi-icon">🐄</div>
+            <div class="kpi-info">
+              <div class="kpi-number" id="totalAnimals">0</div>
+              <div class="kpi-label">Total Hewan</div>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-number" id="totalSpecies">0</div>
-            <div class="stat-label">Jenis Spesies</div>
+          <div class="kpi-card success">
+            <div class="kpi-icon">💚</div>
+            <div class="kpi-info">
+              <div class="kpi-number" id="healthyAnimals">0</div>
+              <div class="kpi-label">Hewan Sehat</div>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-number" id="totalMale">0</div>
-            <div class="stat-label">Jantan</div>
+          <div class="kpi-card warning">
+            <div class="kpi-icon">⏰</div>
+            <div class="kpi-info">
+              <div class="kpi-number" id="scheduledCare">0</div>
+              <div class="kpi-label">Perawatan Terjadwal</div>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-number" id="totalFemale">0</div>
-            <div class="stat-label">Betina</div>
+          <div class="kpi-card info">
+            <div class="kpi-icon">📈</div>
+            <div class="kpi-info">
+              <div class="kpi-number" id="avgGrowth">0%</div>
+              <div class="kpi-label">Rata-rata Pertumbuhan</div>
+            </div>
+          </div>
+          <div class="kpi-card secondary">
+            <div class="kpi-icon">🌾</div>
+            <div class="kpi-info">
+              <div class="kpi-number" id="readyHarvest">0</div>
+              <div class="kpi-label">Siap Panen</div>
+            </div>
+          </div>
+          <div class="kpi-card accent">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-info">
+              <div class="kpi-number" id="monthlyRevenue">Rp 0</div>
+              <div class="kpi-label">Pendapatan Bulan Ini</div>
+            </div>
           </div>
         </div>
-        <p>
-          Selamat datang di sistem pendataan hewan. Gunakan menu di atas untuk
-          mengelola data hewan Anda.
-        </p>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <h3>🚀 Aksi Cepat</h3>
+          <div class="action-buttons">
+            <button class="action-btn" onclick="showTab('pendataan')">
+              ➕ Tambah Hewan Baru
+            </button>
+            <button class="action-btn" onclick="showTab('perawatan')">
+              💉 Jadwal Perawatan
+            </button>
+            <button class="action-btn" onclick="showTab('monitoring')">
+              📏 Input Data Pertumbuhan
+            </button>
+            <button class="action-btn" onclick="showTab('panen')">
+              📦 Catat Hasil Panen
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="recent-activities">
+          <h3>📝 Aktivitas Terbaru</h3>
+          <div id="recentActivities" class="activity-list">
+            <div class="no-data">Belum ada aktivitas terbaru</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Add Animal Tab -->
-      <div id="add" class="tab-content">
-        <h2>Tambah Data Hewan</h2>
-        <form id="animalForm">
-          <div class="form-group">
-            <label for="name">Nama Hewan *</label>
-            <input type="text" id="name" required />
+      <!-- Pendataan Hewan Tab -->
+      <div id="pendataan" class="tab-content">
+        <div class="module-header">
+          <h2>📝 Pendataan Hewan</h2>
+          <p>Registrasi dan manajemen data hewan ternak yang komprehensif</p>
+        </div>
+
+        <div class="pendataan-tabs">
+          <button class="sub-tab active" onclick="showSubTab('registrasi')">
+            ➕ Registrasi Hewan Baru
+          </button>
+          <button class="sub-tab" onclick="showSubTab('manajemen')">
+            📋 Manajemen Data
+          </button>
+          <button class="sub-tab" onclick="showSubTab('pencarian')">
+            🔍 Pencarian & Filter
+          </button>
+        </div>
+
+        <!-- Registrasi Sub Tab -->
+        <div id="registrasi" class="sub-content active">
+          <div class="form-sections">
+            <!-- Identifikasi Section -->
+            <div class="form-section">
+              <h3>🏷️ Identifikasi Hewan</h3>
+              <form id="animalForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="animalId">ID Hewan (Auto Generated)</label>
+                    <input type="text" id="animalId" readonly />
+                  </div>
+                  <div class="form-group">
+                    <label for="qrCode">QR Code</label>
+                    <div class="qr-generator">
+                      <button type="button" onclick="generateQRCode()" class="btn-small">
+                        📱 Generate QR
+                      </button>
+                      <div id="qrDisplay"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="name">Nama Hewan *</label>
+                    <input type="text" id="name" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="species">Spesies *</label>
+                    <select id="species" required>
+                      <option value="">Pilih Spesies</option>
+                      <option value="Sapi">Sapi</option>
+                      <option value="Kambing">Kambing</option>
+                      <option value="Domba">Domba</option>
+                      <option value="Ayam">Ayam</option>
+                      <option value="Bebek">Bebek</option>
+                      <option value="Lainnya">Lainnya</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+
+            <!-- Data Biometrik Section -->
+            <div class="form-section">
+              <h3>📏 Data Biometrik</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="breed">Ras/Breed</label>
+                  <input type="text" id="breed" />
+                </div>
+                <div class="form-group">
+                  <label for="gender">Jenis Kelamin *</label>
+                  <select id="gender" required>
+                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="Jantan">Jantan</option>
+                    <option value="Betina">Betina</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="birthDate">Tanggal Lahir</label>
+                  <input type="date" id="birthDate" />
+                </div>
+                <div class="form-group">
+                  <label for="age">Umur (bulan)</label>
+                  <input type="number" id="age" min="0" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="weight">Berat Awal (kg)</label>
+                  <input type="number" id="weight" step="0.1" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="height">Tinggi (cm)</label>
+                  <input type="number" id="height" step="0.1" min="0" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="color">Warna Dominan</label>
+                  <input type="text" id="color" />
+                </div>
+                <div class="form-group">
+                  <label for="markings">Tanda Khusus</label>
+                  <input type="text" id="markings" placeholder="Ciri khas, tatto, dll" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Silsilah & Keturunan Section -->
+            <div class="form-section">
+              <h3>👨‍👩‍👧‍👦 Silsilah & Keturunan</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="parentMale">ID Pejantan (Ayah)</label>
+                  <input type="text" id="parentMale" />
+                </div>
+                <div class="form-group">
+                  <label for="parentFemale">ID Betina (Ibu)</label>
+                  <input type="text" id="parentFemale" />
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="generation">Generasi</label>
+                <select id="generation">
+                  <option value="">Pilih Generasi</option>
+                  <option value="F0">F0 (Indukan)</option>
+                  <option value="F1">F1 (Generasi 1)</option>
+                  <option value="F2">F2 (Generasi 2)</option>
+                  <option value="F3">F3 (Generasi 3)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Lokasi & Status Section -->
+            <div class="form-section">
+              <h3>📍 Lokasi & Status</h3>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="location">Lokasi Kandang</label>
+                  <input type="text" id="location" />
+                </div>
+                <div class="form-group">
+                  <label for="status">Status Hewan</label>
+                  <select id="status">
+                    <option value="Aktif">Aktif</option>
+                    <option value="Sakit">Sakit</option>
+                    <option value="Karantina">Karantina</option>
+                    <option value="Dijual">Dijual</option>
+                    <option value="Mati">Mati</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="purpose">Tujuan Pemeliharaan</label>
+                <select id="purpose">
+                  <option value="">Pilih Tujuan</option>
+                  <option value="Pembibitan">Pembibitan</option>
+                  <option value="Penggemukan">Penggemukan</option>
+                  <option value="Perah">Perah</option>
+                  <option value="Telur">Telur</option>
+                  <option value="Kombinasi">Kombinasi</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Upload Dokumen Section -->
+            <div class="form-section">
+              <h3>📄 Dokumen Pendukung</h3>
+              <div class="document-upload">
+                <div class="upload-area">
+                  <input type="file" id="documents" multiple accept=".pdf,.jpg,.jpeg,.png" />
+                  <label for="documents" class="upload-label">
+                    📁 Upload Sertifikat, Foto, atau Dokumen Lainnya
+                  </label>
+                </div>
+                <div id="uploadedFiles" class="file-list"></div>
+              </div>
+            </div>
+
+            <!-- Catatan Section -->
+            <div class="form-section">
+              <h3>📝 Catatan Tambahan</h3>
+              <div class="form-group">
+                <label for="notes">Catatan</label>
+                <textarea id="notes" rows="4" placeholder="Catatan khusus, riwayat kesehatan awal, dll"></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                💾 Simpan Data Hewan
+              </button>
+              <button type="reset" class="btn btn-secondary">
+                🔄 Reset Form
+              </button>
+            </div>
+          </form>
+          </div>
+        </div>
+
+        <!-- Manajemen Data Sub Tab -->
+        <div id="manajemen" class="sub-content">
+          <div class="data-management">
+            <div class="management-actions">
+              <button class="btn btn-info" onclick="exportAllData()">
+                📤 Export Data
+              </button>
+              <button class="btn btn-success" onclick="importData()">
+                📥 Import Data
+              </button>
+              <button class="btn btn-warning" onclick="printAnimalList()">
+                🖨️ Print Laporan
+              </button>
+            </div>
+            
+            <div class="data-overview">
+              <h3>📊 Ringkasan Data</h3>
+              <div id="dataOverview" class="overview-cards">
+                <!-- Will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pencarian Sub Tab -->
+        <div id="pencarian" class="sub-content">
+          <div class="advanced-search">
+            <h3>🔍 Pencarian & Filter Lanjut</h3>
+            
+            <!-- Search akan menggunakan modul yang sudah ada -->
+            <div class="search-placeholder">
+              <p>Gunakan tab <strong>🔍 Pencarian</strong> untuk fitur pencarian yang lebih lengkap</p>
+              <button class="btn" onclick="showTab('search')">
+                🔍 Buka Modul Pencarian
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Perawatan Hewan Tab -->
+      <div id="perawatan" class="tab-content">
+        <div class="module-header">
+          <h2>🏥 Perawatan Hewan</h2>
+          <p>Manajemen kesehatan dan perawatan hewan yang optimal</p>
+        </div>
+
+        <div class="perawatan-tabs">
+          <button class="sub-tab active" onclick="showSubTab('jadwal')">
+            📅 Jadwal Perawatan
+          </button>
+          <button class="sub-tab" onclick="showSubTab('rekam-medis')">
+            📋 Rekam Medis
+          </button>
+          <button class="sub-tab" onclick="showSubTab('layanan-medis')">
+            👨‍⚕️ Layanan Medis
+          </button>
+        </div>
+
+        <!-- Jadwal Perawatan Sub Tab -->
+        <div id="jadwal" class="sub-content active">
+          <div class="schedule-section">
+            <div class="schedule-actions">
+              <button class="btn btn-primary" onclick="showAddScheduleModal()">
+                ➕ Tambah Jadwal Baru
+              </button>
+            </div>
+
+            <!-- Calendar View -->
+            <div class="calendar-container">
+              <div class="calendar-header">
+                <button onclick="previousMonth()" class="btn-small">◀</button>
+                <h3 id="currentMonth">Oktober 2025</h3>
+                <button onclick="nextMonth()" class="btn-small">▶</button>
+              </div>
+              <div id="calendarGrid" class="calendar-grid">
+                <!-- Calendar will be generated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Upcoming Schedules -->
+            <div class="upcoming-schedules">
+              <h3>⏰ Jadwal Mendatang (7 hari ke depan)</h3>
+              <div id="upcomingList" class="schedule-list">
+                <!-- Will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rekam Medis Sub Tab -->
+        <div id="rekam-medis" class="sub-content">
+          <div class="medical-records">
+            <div class="record-actions">
+              <button class="btn btn-primary" onclick="showAddMedicalRecordModal()">
+                ➕ Tambah Catatan Medis
+              </button>
+            </div>
+
+            <div class="animal-selector">
+              <label for="selectAnimalMedical">Pilih Hewan:</label>
+              <select id="selectAnimalMedical" onchange="loadMedicalHistory()">
+                <option value="">-- Pilih Hewan --</option>
+                <!-- Will be populated by JavaScript -->
+              </select>
+            </div>
+
+            <div id="medicalHistory" class="medical-history">
+              <!-- Medical records will be displayed here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Layanan Medis Sub Tab -->
+        <div id="layanan-medis" class="sub-content">
+          <div class="medical-services">
+            <div class="services-grid">
+              <div class="service-card">
+                <div class="service-icon">👨‍⚕️</div>
+                <h3>Konsultasi Dokter Hewan</h3>
+                <p>Konsultasi online atau booking janji temu</p>
+                <button class="btn">📞 Hubungi Dokter</button>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">💊</div>
+                <h3>Apotek Hewan</h3>
+                <p>Pesan obat dan vitamin untuk hewan</p>
+                <button class="btn">🛒 Buka Apotek</button>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">🚨</div>
+                <h3>Emergency Call</h3>
+                <p>Panggilan darurat untuk kondisi kritis</p>
+                <button class="btn btn-danger">🚨 Emergency</button>
+              </div>
+
+              <div class="service-card">
+                <div class="service-icon">🏥</div>
+                <h3>Klinik Terdekat</h3>
+                <p>Cari klinik hewan terdekat</p>
+                <button class="btn">📍 Cari Klinik</button>
+              </div>
+            </div>
+
+            <!-- Emergency Contacts -->
+            <div class="emergency-contacts">
+              <h3>📞 Kontak Darurat</h3>
+              <div class="contact-list">
+                <div class="contact-item">
+                  <strong>Dr. Hewan Jakarta</strong>
+                  <span>📞 021-12345678</span>
+                </div>
+                <div class="contact-item">
+                  <strong>Klinik Hewan 24 Jam</strong>
+                  <span>📞 0812-3456-7890</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monitoring Pertumbuhan Tab -->
+      <div id="monitoring" class="tab-content">
+        <div class="module-header">
+          <h2>📈 Monitoring Pertumbuhan</h2>
+          <p>Pantau dan analisis perkembangan fisik hewan ternak</p>
+        </div>
+
+        <div class="monitoring-section">
+          <!-- Animal Selector -->
+          <div class="animal-selector-section">
+            <div class="form-group">
+              <label for="selectAnimalMonitoring">Pilih Hewan untuk Monitoring:</label>
+              <select id="selectAnimalMonitoring" onchange="loadGrowthData()">
+                <option value="">-- Pilih Hewan --</option>
+                <!-- Will be populated by JavaScript -->
+              </select>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="species">Spesies *</label>
-            <input type="text" id="species" required />
+          <!-- Growth Input Form -->
+          <div class="growth-input">
+            <h3>📊 Input Data Pertumbuhan</h3>
+            <form id="growthForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="measureDate">Tanggal Pengukuran</label>
+                  <input type="date" id="measureDate" required />
+                </div>
+                <div class="form-group">
+                  <label for="currentWeight">Berat Badan (kg)</label>
+                  <input type="number" id="currentWeight" step="0.1" min="0" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="currentHeight">Tinggi (cm)</label>
+                  <input type="number" id="currentHeight" step="0.1" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="currentLength">Panjang (cm)</label>
+                  <input type="number" id="currentLength" step="0.1" min="0" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="growthNotes">Catatan Pertumbuhan</label>
+                <textarea id="growthNotes" rows="2" placeholder="Kondisi fisik, nafsu makan, dll"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                💾 Simpan Data Pertumbuhan
+              </button>
+            </form>
           </div>
 
-          <div class="form-group">
-            <label for="breed">Ras/Breed</label>
-            <input type="text" id="breed" />
+          <!-- Growth Charts -->
+          <div class="growth-charts">
+            <h3>📈 Grafik Pertumbuhan</h3>
+            <div class="chart-container">
+              <canvas id="growthChart" width="400" height="200"></canvas>
+            </div>
+            
+            <div class="growth-analysis">
+              <h4>📊 Analisis Pertumbuhan</h4>
+              <div id="growthAnalysis" class="analysis-cards">
+                <!-- Analysis results will be shown here -->
+              </div>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="gender">Jenis Kelamin *</label>
-            <select id="gender" required>
-              <option value="">Pilih Jenis Kelamin</option>
-              <option value="Jantan">Jantan</option>
-              <option value="Betina">Betina</option>
-            </select>
+          <!-- Growth Alerts -->
+          <div class="growth-alerts">
+            <h3>⚠️ Peringatan Pertumbuhan</h3>
+            <div id="growthAlerts" class="alert-list">
+              <!-- Alerts will be displayed here -->
+            </div>
           </div>
+        </div>
+      </div>
 
-          <div class="form-group">
-            <label for="age">Umur (bulan)</label>
-            <input type="number" id="age" min="0" />
+      <!-- Panen Tab -->
+      <div id="panen" class="tab-content">
+        <div class="module-header">
+          <h2>🌾 Manajemen Panen</h2>
+          <p>Kelola hasil panen dan distribusi produk peternakan</p>
+        </div>
+
+        <div class="panen-tabs">
+          <button class="sub-tab active" onclick="showSubTab('pencatatan-panen')">
+            📝 Pencatatan Panen
+          </button>
+          <button class="sub-tab" onclick="showSubTab('stok-management')">
+            📦 Manajemen Stok
+          </button>
+          <button class="sub-tab" onclick="showSubTab('pasca-panen')">
+            🏭 Pasca Panen
+          </button>
+          <button class="sub-tab" onclick="showSubTab('penjualan')">
+            💰 Penjualan
+          </button>
+        </div>
+
+        <!-- Pencatatan Panen Sub Tab -->
+        <div id="pencatatan-panen" class="sub-content active">
+          <div class="harvest-recording">
+            <form id="harvestForm">
+              <h3>📋 Form Pencatatan Panen</h3>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="harvestDate">Tanggal Panen</label>
+                  <input type="date" id="harvestDate" required />
+                </div>
+                <div class="form-group">
+                  <label for="harvestType">Jenis Produk</label>
+                  <select id="harvestType" required>
+                    <option value="">Pilih Jenis Produk</option>
+                    <option value="Susu">Susu (Liter)</option>
+                    <option value="Telur">Telur (Butir)</option>
+                    <option value="Daging">Daging (Kg)</option>
+                    <option value="Bulu">Bulu/Wol (Kg)</option>
+                    <option value="Lainnya">Lainnya</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="harvestQuantity">Jumlah/Volume</label>
+                  <input type="number" id="harvestQuantity" step="0.1" min="0" required />
+                </div>
+                <div class="form-group">
+                  <label for="harvestUnit">Satuan</label>
+                  <select id="harvestUnit">
+                    <option value="Kg">Kilogram (Kg)</option>
+                    <option value="Liter">Liter</option>
+                    <option value="Butir">Butir</option>
+                    <option value="Ekor">Ekor</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="sourceAnimal">Hewan Sumber</label>
+                <select id="sourceAnimal">
+                  <option value="">-- Pilih Hewan (Opsional) --</option>
+                  <!-- Will be populated by JavaScript -->
+                </select>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="harvestQuality">Kualitas Produk</label>
+                  <select id="harvestQuality">
+                    <option value="Grade A">Grade A (Excellent)</option>
+                    <option value="Grade B">Grade B (Good)</option>
+                    <option value="Grade C">Grade C (Fair)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="storageLocation">Lokasi Penyimpanan</label>
+                  <input type="text" id="storageLocation" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="harvestNotes">Catatan Panen</label>
+                <textarea id="harvestNotes" rows="3" placeholder="Kondisi panen, kualitas, dll"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                💾 Simpan Data Panen
+              </button>
+            </form>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="weight">Berat (kg)</label>
-            <input type="number" id="weight" step="0.1" min="0" />
+        <!-- Manajemen Stok Sub Tab -->
+        <div id="stok-management" class="sub-content">
+          <div class="stock-management">
+            <div class="stock-overview">
+              <h3>📦 Ringkasan Stok</h3>
+              <div id="stockOverview" class="stock-cards">
+                <!-- Stock cards will be populated by JavaScript -->
+              </div>
+            </div>
+
+            <div class="stock-table">
+              <h3>📊 Detail Inventaris</h3>
+              <div id="stockTable">
+                <!-- Stock table will be populated by JavaScript -->
+              </div>
+            </div>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="color">Warna</label>
-            <input type="text" id="color" />
+        <!-- Pasca Panen Sub Tab -->
+        <div id="pasca-panen" class="sub-content">
+          <div class="post-harvest">
+            <h3>🏭 Proses Pasca Panen</h3>
+            
+            <div class="process-steps">
+              <div class="step-card">
+                <div class="step-number">1</div>
+                <h4>📦 Pengemasan</h4>
+                <p>Panduan pengemasan sesuai standar</p>
+                <button class="btn btn-small">📋 Lihat Panduan</button>
+              </div>
+
+              <div class="step-card">
+                <div class="step-number">2</div>
+                <h4>❄️ Penyimpanan</h4>
+                <p>Kondisi optimal penyimpanan produk</p>
+                <button class="btn btn-small">🌡️ Monitor Suhu</button>
+              </div>
+
+              <div class="step-card">
+                <div class="step-number">3</div>
+                <h4>🚚 Distribusi</h4>
+                <p>Koordinasi pengiriman ke distributor</p>
+                <button class="btn btn-small">📍 Lacak Pengiriman</button>
+              </div>
+            </div>
+
+            <!-- Quality Control -->
+            <div class="quality-control">
+              <h4>✅ Quality Control</h4>
+              <form id="qualityForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="qcProduct">Produk</label>
+                    <select id="qcProduct">
+                      <!-- Options will be populated -->
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="qcDate">Tanggal Pemeriksaan</label>
+                    <input type="date" id="qcDate" />
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="qcResults">Hasil Pemeriksaan</label>
+                  <textarea id="qcResults" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="btn">💾 Simpan QC</button>
+              </form>
+            </div>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="health">Status Kesehatan</label>
-            <select id="health">
-              <option value="">Pilih Status</option>
-              <option value="Sehat">Sehat</option>
-              <option value="Sakit">Sakit</option>
-              <option value="Pemulihan">Pemulihan</option>
-            </select>
+        <!-- Penjualan Sub Tab -->
+        <div id="penjualan" class="sub-content">
+          <div class="sales-management">
+            <div class="marketplace-integration">
+              <h3>🛒 Integrasi Marketplace</h3>
+              <div class="marketplace-cards">
+                <div class="marketplace-card">
+                  <div class="marketplace-icon">🏪</div>
+                  <h4>Pasar Lokal</h4>
+                  <button class="btn">📤 Upload Produk</button>
+                </div>
+                
+                <div class="marketplace-card">
+                  <div class="marketplace-icon">💻</div>
+                  <h4>E-Commerce</h4>
+                  <button class="btn">🔗 Integrasikan</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="sales-tracking">
+              <h3>💰 Pelacakan Penjualan</h3>
+              <div id="salesSummary" class="sales-summary">
+                <!-- Sales summary will be displayed here -->
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
 
-          <div class="form-group">
-            <label for="location">Lokasi</label>
-            <input type="text" id="location" />
+      <!-- Evaluasi dan Analisis Tab -->
+      <div id="evaluasi" class="tab-content">
+        <div class="module-header">
+          <h2>📋 Evaluasi dan Analisis</h2>
+          <p>Analisis kinerja peternakan dan pengambilan keputusan berbasis data</p>
+        </div>
+
+        <div class="evaluation-tabs">
+          <button class="sub-tab active" onclick="showSubTab('dashboard-kpi')">
+            📊 Dashboard KPI
+          </button>
+          <button class="sub-tab" onclick="showSubTab('laporan')">
+            📄 Laporan
+          </button>
+          <button class="sub-tab" onclick="showSubTab('analisis-data')">
+            📈 Analisis Data
+          </button>
+          <button class="sub-tab" onclick="showSubTab('rekomendasi')">
+            💡 Rekomendasi
+          </button>
+        </div>
+
+        <!-- Dashboard KPI Sub Tab -->
+        <div id="dashboard-kpi" class="sub-content active">
+          <div class="kpi-dashboard">
+            <div class="performance-metrics">
+              <h3>📊 Metrik Kinerja Utama</h3>
+              <div class="metrics-grid">
+                <div class="metric-card">
+                  <div class="metric-icon">🥛</div>
+                  <div class="metric-value" id="milkProduction">0 L</div>
+                  <div class="metric-label">Produksi Susu/Hari</div>
+                  <div class="metric-trend positive">+5.2%</div>
+                </div>
+
+                <div class="metric-card">
+                  <div class="metric-icon">🥚</div>
+                  <div class="metric-value" id="eggProduction">0</div>
+                  <div class="metric-label">Produksi Telur/Hari</div>
+                  <div class="metric-trend positive">+3.8%</div>
+                </div>
+
+                <div class="metric-card">
+                  <div class="metric-icon">📈</div>
+                  <div class="metric-value" id="avgGrowthRate">0%</div>
+                  <div class="metric-label">Rata-rata Pertumbuhan</div>
+                  <div class="metric-trend negative">-1.2%</div>
+                </div>
+
+                <div class="metric-card">
+                  <div class="metric-icon">💊</div>
+                  <div class="metric-value" id="healthIndex">0%</div>
+                  <div class="metric-label">Indeks Kesehatan</div>
+                  <div class="metric-trend positive">+2.1%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Performance Charts -->
+            <div class="performance-charts">
+              <div class="chart-section">
+                <h4>📈 Tren Produktivitas (6 Bulan Terakhir)</h4>
+                <canvas id="productivityChart" width="400" height="200"></canvas>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <div class="form-group">
-            <label for="notes">Catatan</label>
-            <textarea id="notes" rows="3"></textarea>
+        <!-- Laporan Sub Tab -->
+        <div id="laporan" class="sub-content">
+          <div class="reports-section">
+            <div class="report-generators">
+              <h3>📄 Generator Laporan</h3>
+              <div class="report-options">
+                <div class="report-card">
+                  <h4>📊 Laporan Bulanan</h4>
+                  <p>Ringkasan performa peternakan bulan ini</p>
+                  <button class="btn" onclick="generateMonthlyReport()">
+                    📋 Generate
+                  </button>
+                </div>
+
+                <div class="report-card">
+                  <h4>📈 Laporan Tahunan</h4>
+                  <p>Evaluasi kinerja tahunan yang komprehensif</p>
+                  <button class="btn" onclick="generateAnnualReport()">
+                    📋 Generate
+                  </button>
+                </div>
+
+                <div class="report-card">
+                  <h4>🏥 Laporan Kesehatan</h4>
+                  <p>Status kesehatan dan perawatan hewan</p>
+                  <button class="btn" onclick="generateHealthReport()">
+                    📋 Generate
+                  </button>
+                </div>
+
+                <div class="report-card">
+                  <h4>💰 Laporan Keuangan</h4>
+                  <p>Analisis pendapatan dan pengeluaran</p>
+                  <button class="btn" onclick="generateFinancialReport()">
+                    📋 Generate
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <button type="submit" class="btn">Simpan Data</button>
-          <button type="reset" class="btn btn-secondary">Reset Form</button>
-        </form>
+        <!-- Analisis Data Sub Tab -->
+        <div id="analisis-data" class="sub-content">
+          <div class="data-analysis">
+            <h3>🔍 Analisis Data Lanjutan</h3>
+            
+            <div class="analysis-tools">
+              <div class="analysis-card">
+                <h4>📊 Analisis Tren</h4>
+                <p>Identifikasi pola dan tren dalam data peternakan</p>
+                <button class="btn">🔍 Analisis</button>
+              </div>
+
+              <div class="analysis-card">
+                <h4>⚠️ Deteksi Anomali</h4>
+                <p>Identifikasi anomali dalam performa hewan</p>
+                <button class="btn">🔍 Deteksi</button>
+              </div>
+
+              <div class="analysis-card">
+                <h4>🎯 Prediksi</h4>
+                <p>Prediksi waktu panen dan produktivitas</p>
+                <button class="btn">🔮 Prediksi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rekomendasi Sub Tab -->
+        <div id="rekomendasi" class="sub-content">
+          <div class="recommendations">
+            <h3>💡 Rekomendasi Sistem</h3>
+            <div id="systemRecommendations" class="recommendation-list">
+              <!-- Recommendations will be populated by JavaScript -->
+            </div>
+
+            <!-- Export Options -->
+            <div class="export-options">
+              <h4>📤 Export Data</h4>
+              <div class="export-buttons">
+                <button class="btn" onclick="exportToExcel()">
+                  📊 Export ke Excel
+                </button>
+                <button class="btn" onclick="exportToPDF()">
+                  📄 Export ke PDF
+                </button>
+                <button class="btn" onclick="exportToBI()">
+                  📈 Export ke BI Tools
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Search Tab -->
@@ -1113,496 +1178,10 @@
       </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
-    <script>
-      // Data storage
-      let animals = JSON.parse(localStorage.getItem("animals") || "[]");
-      let currentId = parseInt(localStorage.getItem("currentId") || "1");
-
-      // Tab functionality
-      function showTab(tabName) {
-        // Hide all tabs
-        document.querySelectorAll(".tab-content").forEach((tab) => {
-          tab.classList.remove("active");
-        });
-        document.querySelectorAll(".nav-tab").forEach((tab) => {
-          tab.classList.remove("active");
-        });
-
-        // Show selected tab
-        document.getElementById(tabName).classList.add("active");
-        event.target.classList.add("active");
-
-        // Load data for specific tabs
-        if (tabName === "list") {
-          displayAllAnimals();
-        } else if (tabName === "dashboard") {
-          updateDashboard();
-        }
-      }
-
-      // Generate unique ID
-      function generateId() {
-        return currentId++;
-      }
-
-      // Save data to localStorage
-      function saveData() {
-        localStorage.setItem("animals", JSON.stringify(animals));
-        localStorage.setItem("currentId", currentId.toString());
-      }
-
-      // Add animal form handler
-      document
-        .getElementById("animalForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          const animal = {
-            id: generateId(),
-            name: document.getElementById("name").value,
-            species: document.getElementById("species").value,
-            breed: document.getElementById("breed").value,
-            gender: document.getElementById("gender").value,
-            age: parseInt(document.getElementById("age").value) || 0,
-            weight: parseFloat(document.getElementById("weight").value) || 0,
-            color: document.getElementById("color").value,
-            health: document.getElementById("health").value,
-            location: document.getElementById("location").value,
-            notes: document.getElementById("notes").value,
-            dateAdded: new Date().toLocaleDateString("id-ID"),
-          };
-
-          animals.push(animal);
-          saveData();
-
-          alert("Data hewan berhasil ditambahkan!");
-          this.reset();
-          updateDashboard();
-        });
-
-      // Generate barcode
-      function generateBarcode(animalId) {
-        const canvas = document.createElement("canvas");
-        JsBarcode(canvas, animalId.toString().padStart(8, "0"), {
-          format: "CODE128",
-          width: 2,
-          height: 100,
-          displayValue: true,
-        });
-        return canvas;
-      }
-
-      // Display animal card
-      function displayAnimalCard(animal) {
-        const barcodeCanvas = generateBarcode(animal.id);
-
-        return `
-                <div class="animal-card">
-                    <div class="animal-header">
-                        <div>
-                            <div class="animal-name">${animal.name}</div>
-                            <div class="animal-species">${animal.species}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="animal-info">
-                        <div class="info-item">
-                            <div class="info-label">ID</div>
-                            <div class="info-value">${animal.id
-                              .toString()
-                              .padStart(6, "0")}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Ras/Breed</div>
-                            <div class="info-value">${animal.breed || "-"}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Jenis Kelamin</div>
-                            <div class="info-value">${animal.gender}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Umur</div>
-                            <div class="info-value">${animal.age} bulan</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Berat</div>
-                            <div class="info-value">${animal.weight} kg</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Warna</div>
-                            <div class="info-value">${animal.color || "-"}</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Status Kesehatan</div>
-                            <div class="info-value">${
-                              animal.health || "-"
-                            }</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Lokasi</div>
-                            <div class="info-value">${
-                              animal.location || "-"
-                            }</div>
-                        </div>
-                    </div>
-                    
-                    ${
-                      animal.notes
-                        ? `<div class="info-item"><div class="info-label">Catatan</div><div class="info-value">${animal.notes}</div></div>`
-                        : ""
-                    }
-                    
-                    <div class="barcode-container">
-                        <h4>Barcode</h4>
-                        <div id="barcode-${animal.id}"></div>
-                        <button class="btn" onclick="downloadBarcode(${
-                          animal.id
-                        }, '${animal.name}')">Download Barcode</button>
-                        <button class="btn btn-secondary" onclick="deleteAnimal(${
-                          animal.id
-                        })">Hapus</button>
-                    </div>
-                </div>
-            `;
-      }
-
-      // Display all animals
-      function displayAllAnimals() {
-        const container = document.getElementById("animalList");
-
-        if (animals.length === 0) {
-          container.innerHTML =
-            '<div class="no-data">Belum ada data hewan yang ditambahkan.</div>';
-          return;
-        }
-
-        container.innerHTML = animals
-          .map((animal) => displayAnimalCard(animal))
-          .join("");
-
-        // Generate barcodes after DOM is updated
-        animals.forEach((animal) => {
-          const barcodeContainer = document.getElementById(
-            `barcode-${animal.id}`
-          );
-          if (barcodeContainer) {
-            barcodeContainer.appendChild(generateBarcode(animal.id));
-          }
-        });
-      }
-
-      // Search functionality
-      document
-        .getElementById("searchInput")
-        .addEventListener("input", function () {
-          const query = this.value.toLowerCase();
-          searchAnimals(query);
-        });
-
-      // Enhanced search function
-      function searchAnimals(query) {
-        const results = animals.filter(
-          (animal) =>
-            animal.name.toLowerCase().includes(query) ||
-            animal.species.toLowerCase().includes(query) ||
-            animal.id.toString().includes(query) ||
-            (animal.breed && animal.breed.toLowerCase().includes(query)) ||
-            (animal.location &&
-              animal.location.toLowerCase().includes(query)) ||
-            (animal.color && animal.color.toLowerCase().includes(query))
-        );
-
-        displaySearchResults(results, query);
-      }
-
-      // Display search results
-      function displaySearchResults(results, query = "") {
-        const container = document.getElementById("searchResults");
-
-        if (query === "") {
-          container.innerHTML =
-            '<div class="no-data">Masukkan kata kunci pencarian.</div>';
-          return;
-        }
-
-        if (results.length === 0) {
-          container.innerHTML =
-            '<div class="no-data">Tidak ada hasil yang ditemukan.</div>';
-          return;
-        }
-
-        container.innerHTML = `
-                <div style="margin-bottom: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; color: #333;">
-                    <strong>Ditemukan ${results.length} hasil</strong>
-                </div>
-                ${results.map((animal) => displayAnimalCard(animal)).join("")}
-            `;
-
-        // Generate barcodes for search results
-        results.forEach((animal) => {
-          const barcodeContainer = document.getElementById(
-            `barcode-${animal.id}`
-          );
-          if (barcodeContainer) {
-            barcodeContainer.appendChild(generateBarcode(animal.id));
-          }
-        });
-      }
-
-      // Switch search method
-      function switchSearchMethod(method) {
-        // Update active button
-        document.querySelectorAll(".search-method-btn").forEach((btn) => {
-          btn.classList.remove("active");
-        });
-        event.target.classList.add("active");
-
-        // Hide all search containers
-        document.querySelectorAll(".search-container").forEach((container) => {
-          container.style.display = "none";
-        });
-
-        // Show selected search container
-        document.getElementById(method + "Search").style.display = "block";
-
-        // Clear previous results
-        document.getElementById("searchResults").innerHTML =
-          '<div class="no-data">Pilih metode pencarian dan masukkan kata kunci.</div>';
-      }
-
-      // Search by ID
-      function searchById() {
-        const idInput = document.getElementById("idInput");
-        const searchId = parseInt(idInput.value);
-
-        if (!searchId) {
-          alert("Masukkan ID yang valid!");
-          return;
-        }
-
-        const result = animals.find((animal) => animal.id === searchId);
-
-        if (result) {
-          displaySearchResults([result], searchId.toString());
-        } else {
-          document.getElementById(
-            "searchResults"
-          ).innerHTML = `<div class="no-data">Hewan dengan ID ${searchId} tidak ditemukan.</div>`;
-        }
-      }
-
-      // Barcode scanner variables
-      let video = null;
-      let canvas = null;
-      let context = null;
-      let scanning = false;
-
-      // Start barcode scanner
-      async function startBarcodeScanner() {
-        const scannerContainer = document.getElementById("scannerContainer");
-        const scanResult = document.getElementById("scanResult");
-
-        video = document.getElementById("video");
-        canvas = document.getElementById("canvas");
-        context = canvas.getContext("2d");
-
-        try {
-          // Request camera permission
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              width: { ideal: 1280 },
-              height: { ideal: 720 },
-              facingMode: "environment", // Use back camera if available
-            },
-          });
-
-          video.srcObject = stream;
-          video.play();
-          scanning = true;
-
-          scannerContainer.style.display = "block";
-          scanResult.style.display = "none";
-
-          // Start scanning process
-          scanBarcode();
-        } catch (error) {
-          console.error("Error accessing camera:", error);
-          document.getElementById(
-            "searchResults"
-          ).innerHTML = `<div class="camera-permission">
-                        <strong>⚠️ Tidak dapat mengakses kamera</strong><br>
-                        Pastikan Anda telah memberikan izin kamera atau gunakan input manual di bawah.
-                    </div>`;
-        }
-      }
-
-      // Stop barcode scanner
-      function stopBarcodeScanner() {
-        scanning = false;
-
-        if (video && video.srcObject) {
-          const tracks = video.srcObject.getTracks();
-          tracks.forEach((track) => track.stop());
-          video.srcObject = null;
-        }
-
-        document.getElementById("scannerContainer").style.display = "none";
-        document.getElementById("scanResult").style.display = "none";
-      }
-
-      // Scan barcode from video
-      function scanBarcode() {
-        if (!scanning || !video) return;
-
-        // Set canvas size to match video
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        // Draw video frame to canvas
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // Get image data
-        const imageData = context.getImageData(
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
-
-        // Try to decode barcode (simplified - in real app you'd use a proper barcode library)
-        // For demo purposes, we'll use a timeout to simulate scanning
-
-        // Continue scanning
-        if (scanning) {
-          requestAnimationFrame(scanBarcode);
-        }
-      }
-
-      // Search by barcode (manual input)
-      function searchByBarcode() {
-        const barcodeInput = document.getElementById("barcodeInput");
-        let barcodeValue = barcodeInput.value.trim();
-
-        if (!barcodeValue) {
-          alert("Masukkan kode barcode!");
-          return;
-        }
-
-        // If barcode is 8 digits, treat as ID with leading zeros
-        if (barcodeValue.length === 8 && /^\d+$/.test(barcodeValue)) {
-          const searchId = parseInt(barcodeValue);
-          const result = animals.find((animal) => animal.id === searchId);
-
-          if (result) {
-            displaySearchResults([result], barcodeValue);
-
-            // Show scan result
-            const scanResult = document.getElementById("scanResult");
-            scanResult.innerHTML = `
-                        <div style="color: #28a745;">
-                            <strong>✅ Barcode berhasil dipindai!</strong><br>
-                            Kode: ${barcodeValue}<br>
-                            Ditemukan: ${result.name}
-                        </div>
-                    `;
-            scanResult.style.display = "block";
-          } else {
-            document.getElementById(
-              "searchResults"
-            ).innerHTML = `<div class="no-data">Hewan dengan barcode ${barcodeValue} tidak ditemukan.</div>`;
-
-            const scanResult = document.getElementById("scanResult");
-            scanResult.innerHTML = `
-                        <div style="color: #dc3545;">
-                            <strong>❌ Barcode tidak ditemukan</strong><br>
-                            Kode: ${barcodeValue}
-                        </div>
-                    `;
-            scanResult.style.display = "block";
-          }
-        } else {
-          alert("Format barcode tidak valid! Gunakan 8 digit angka.");
-        }
-
-        barcodeInput.value = "";
-      }
-
-      // ID Input enter key handler
-      document
-        .getElementById("idInput")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            searchById();
-          }
-        });
-
-      // Barcode Input enter key handler
-      document
-        .getElementById("barcodeInput")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            searchByBarcode();
-          }
-        });
-
-      // Download barcode
-      function downloadBarcode(animalId, animalName) {
-        const canvas = generateBarcode(animalId);
-        const link = document.createElement("a");
-        link.download = `barcode-${animalName}-${animalId}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
-      }
-
-      // Delete animal
-      function deleteAnimal(animalId) {
-        if (confirm("Apakah Anda yakin ingin menghapus data hewan ini?")) {
-          animals = animals.filter((animal) => animal.id !== animalId);
-          saveData();
-          displayAllAnimals();
-          updateDashboard();
-          alert("Data hewan berhasil dihapus!");
-        }
-      }
-
-      // Update dashboard statistics
-      function updateDashboard() {
-        document.getElementById("totalAnimals").textContent = animals.length;
-
-        const species = [...new Set(animals.map((animal) => animal.species))];
-        document.getElementById("totalSpecies").textContent = species.length;
-
-        const maleCount = animals.filter(
-          (animal) => animal.gender === "Jantan"
-        ).length;
-        document.getElementById("totalMale").textContent = maleCount;
-
-        const femaleCount = animals.filter(
-          (animal) => animal.gender === "Betina"
-        ).length;
-        document.getElementById("totalFemale").textContent = femaleCount;
-      }
-
-      // Initialize app
-      document.addEventListener("DOMContentLoaded", function () {
-        updateDashboard();
-
-        // Register service worker for PWA
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker
-            .register("./sw.js")
-            .then(function (registration) {
-              console.log(
-                "Service Worker registered successfully:",
-                registration.scope
-              );
-            })
-            .catch(function (error) {
-              console.log("Service Worker registration failed:", error);
-            });
-        }
-      });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/app.js"></script>
   </body>
 </html>

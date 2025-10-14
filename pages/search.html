@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pencarian - Pendataan Hewan PWA</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Pencarian dan filter data hewan dengan berbagai kriteria" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header with Navigation -->
+      <div class="header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1>🐾 Pendataan Hewan</h1>
+            <p>Pencarian & Filter Data</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+            <a href="profil.html" class="btn btn-info">👤 Profil</a>
+            <a href="../index.html" class="btn btn-secondary">🏠 Home</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="nav-link active">🔍 Pencarian</a>
+          <a href="list.html" class="nav-link">📄 Daftar</a>
+          <a href="profil.html" class="nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-header">
+          <h2>🐾 Pendataan Hewan</h2>
+        </div>
+        <div class="mobile-nav-content">
+          <a href="dashboard.html" class="mobile-nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="mobile-nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="mobile-nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="mobile-nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="mobile-nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="mobile-nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="mobile-nav-link active">🔍 Pencarian</a>
+          <a href="list.html" class="mobile-nav-link">📄 Daftar</a>
+          <a href="profil.html" class="mobile-nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="module-header">
+          <h2>🔍 Pencarian & Filter Data</h2>
+          <p>Cari dan filter data hewan dengan berbagai kriteria</p>
+        </div>
+
+        <div class="search-section">
+          <!-- Quick Search -->
+          <div class="card">
+            <div class="card-header">
+              <h3>🔍 Pencarian Cepat</h3>
+            </div>
+            <div class="card-body">
+              <div class="search-input-group">
+                <input 
+                  type="text" 
+                  id="quickSearchInput" 
+                  placeholder="Cari berdasarkan nama, ID, atau tag..."
+                  oninput="performQuickSearch()"
+                />
+                <button class="btn btn-primary" onclick="performQuickSearch()">
+                  🔍 Cari
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced Search Filters -->
+          <div class="card">
+            <div class="card-header">
+              <h3>🎛️ Filter Lanjutan</h3>
+            </div>
+            <div class="card-body">
+              <div class="filters-container"></div>
+            </div>
+          </div>
+              <div class="filter-group">
+                <h4>📋 Data Dasar</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="filterSpecies">Spesies</label>
+                    <select id="filterSpecies">
+                      <option value="">Semua Spesies</option>
+                      <option value="sapi">🐄 Sapi</option>
+                      <option value="kambing">🐐 Kambing</option>
+                      <option value="domba">🐑 Domba</option>
+                      <option value="ayam">🐔 Ayam</option>
+                      <option value="bebek">🦆 Bebek</option>
+                      <option value="kuda">🐎 Kuda</option>
+                      <option value="kerbau">🐃 Kerbau</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="filterGender">Jenis Kelamin</label>
+                    <select id="filterGender">
+                      <option value="">Semua</option>
+                      <option value="jantan">♂️ Jantan</option>
+                      <option value="betina">♀️ Betina</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="filterAgeMin">Umur Minimum (bulan)</label>
+                    <input type="number" id="filterAgeMin" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label for="filterAgeMax">Umur Maksimum (bulan)</label>
+                    <input type="number" id="filterAgeMax" min="0" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <h4">🏥 Status Kesehatan</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="filterHealthStatus">Status Kesehatan</label>
+                    <select id="filterHealthStatus">
+                      <option value="">Semua Status</option>
+                      <option value="sehat">💚 Sehat</option>
+                      <option value="sakit">🔴 Sakit</option>
+                      <option value="perawatan">🟡 Dalam Perawatan</option>
+                      <option value="karantina">🔒 Karantina</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="filterVaccination">Status Vaksinasi</label>
+                    <select id="filterVaccination">
+                      <option value="">Semua</option>
+                      <option value="lengkap">✅ Lengkap</option>
+                      <option value="sebagian">⚠️ Sebagian</option>
+                      <option value="belum">❌ Belum</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <h4>📈 Produktivitas</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="filterProductionMin">Produksi Min (per hari)</label>
+                    <input type="number" id="filterProductionMin" step="0.1" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label for="filterProductionMax">Produksi Max (per hari)</label>
+                    <input type="number" id="filterProductionMax" step="0.1" min="0" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <h4>📅 Tanggal</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="filterDateFrom">Tanggal Lahir Dari</label>
+                    <input type="date" id="filterDateFrom" />
+                  </div>
+                  <div class="form-group">
+                    <label for="filterDateTo">Tanggal Lahir Sampai</label>
+                    <input type="date" id="filterDateTo" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="filter-actions">
+                <button class="btn btn-primary" onclick="applyFilters()">
+                  🎛️ Terapkan Filter
+                </button>
+                <button class="btn btn-secondary" onclick="resetFilters()">
+                  🔄 Reset Filter
+                </button>
+                <button class="btn btn-info" onclick="saveSearchPreset()">
+                  💾 Simpan Preset
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search Presets -->
+          <div class="search-presets">
+            <h3>⚡ Preset Pencarian</h3>
+            <div class="preset-buttons">
+              <button class="btn btn-outline" onclick="loadPreset('productive')">
+                📈 Hewan Produktif
+              </button>
+              <button class="btn btn-outline" onclick="loadPreset('young')">
+                🐣 Hewan Muda
+              </button>
+              <button class="btn btn-outline" onclick="loadPreset('breeding')">
+                💕 Siap Kawin
+              </button>
+              <button class="btn btn-outline" onclick="loadPreset('medical')">
+                🏥 Perlu Perawatan
+              </button>
+            </div>
+          </div>
+
+          <!-- Search Results -->
+          <div class="search-results">
+            <div class="results-header">
+              <h3>📊 Hasil Pencarian</h3>
+              <div class="results-count">
+                <span id="resultsCount">0 hasil ditemukan</span>
+                <div class="view-options">
+                  <button class="view-btn active" onclick="setViewMode('grid')" title="Grid View">⊞</button>
+                  <button class="view-btn" onclick="setViewMode('list')" title="List View">☰</button>
+                  <button class="view-btn" onclick="setViewMode('table')" title="Table View">▤</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="results-actions">
+              <button class="btn btn-secondary" onclick="exportSearchResults()">
+                📤 Export Hasil
+              </button>
+              <button class="btn btn-info" onclick="bulkAction()">
+                📋 Aksi Massal
+              </button>
+            </div>
+
+            <!-- Results Container -->
+            <div id="searchResults" class="results-container">
+              <!-- Search results will be populated here -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="searchPagination">
+              <!-- Pagination controls will be shown here -->
+            </div>
+          </div>
+
+          <!-- Search Statistics -->
+          <div class="search-stats">
+            <h3>📊 Statistik Pencarian</h3>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <h4>📋 Total Data</h4>
+                <div class="stat-value" id="totalAnimals">0</div>
+              </div>
+              <div class="stat-card">
+                <h4">🔍 Hasil Filter</h4>
+                <div class="stat-value" id="filteredResults">0</div>
+              </div>
+              <div class="stat-card">
+                <h4>📈 Tingkat Filter</h4>
+                <div class="stat-value" id="filterRate">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Pendataan Hewan PWA. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script src="../assets/js/error-handler.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      let searchResults = [];
+      let currentPage = 1;
+      let itemsPerPage = 12;
+
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobileNav');
+        let overlay = document.getElementById('mobileOverlay');
+        
+        if (mobileNav) {
+          const isActive = mobileNav.classList.contains('active');
+          
+          if (isActive) {
+            // Close menu
+            mobileNav.classList.remove('active');
+            if (overlay) overlay.remove();
+          } else {
+            // Open menu
+            mobileNav.classList.add('active');
+            
+            // Create overlay if it doesn't exist
+            if (!overlay) {
+              overlay = document.createElement('div');
+              overlay.id = 'mobileOverlay';
+              overlay.className = 'mobile-nav-overlay active';
+              overlay.onclick = toggleMobileMenu;
+              document.body.appendChild(overlay);
+            }
+          }
+        }
+      }
+
+      // Quick search function
+      function performQuickSearch() {
+        const searchTerm = document.getElementById('quickSearchInput').value.toLowerCase();
+        // Implementation would filter animals based on search term
+        console.log('Performing quick search for:', searchTerm);
+        // This would be connected to the actual search logic
+      }
+
+      // Apply advanced filters
+      function applyFilters() {
+        const filters = {
+          species: document.getElementById('filterSpecies').value,
+          gender: document.getElementById('filterGender').value,
+          ageMin: document.getElementById('filterAgeMin').value,
+          ageMax: document.getElementById('filterAgeMax').value,
+          healthStatus: document.getElementById('filterHealthStatus').value,
+          vaccination: document.getElementById('filterVaccination').value,
+          productionMin: document.getElementById('filterProductionMin').value,
+          productionMax: document.getElementById('filterProductionMax').value,
+          dateFrom: document.getElementById('filterDateFrom').value,
+          dateTo: document.getElementById('filterDateTo').value
+        };
+        
+        console.log('Applying filters:', filters);
+        // Implementation would filter animals based on criteria
+      }
+
+      // Reset all filters
+      function resetFilters() {
+        document.getElementById('filterSpecies').value = '';
+        document.getElementById('filterGender').value = '';
+        document.getElementById('filterAgeMin').value = '';
+        document.getElementById('filterAgeMax').value = '';
+        document.getElementById('filterHealthStatus').value = '';
+        document.getElementById('filterVaccination').value = '';
+        document.getElementById('filterProductionMin').value = '';
+        document.getElementById('filterProductionMax').value = '';
+        document.getElementById('filterDateFrom').value = '';
+        document.getElementById('filterDateTo').value = '';
+        
+        // Clear search input
+        document.getElementById('quickSearchInput').value = '';
+        
+        // Reload all data
+        loadAllAnimals();
+      }
+
+      // Load search preset
+      function loadPreset(presetType) {
+        resetFilters();
+        
+        switch(presetType) {
+          case 'productive':
+            document.getElementById('filterProductionMin').value = '5';
+            document.getElementById('filterHealthStatus').value = 'sehat';
+            break;
+          case 'young':
+            document.getElementById('filterAgeMax').value = '12';
+            break;
+          case 'breeding':
+            document.getElementById('filterAgeMin').value = '18';
+            document.getElementById('filterHealthStatus').value = 'sehat';
+            break;
+          case 'medical':
+            document.getElementById('filterHealthStatus').value = 'sakit';
+            break;
+        }
+        
+        applyFilters();
+      }
+
+      // Set view mode
+      function setViewMode(mode) {
+        const viewButtons = document.querySelectorAll('.view-btn');
+        viewButtons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        const resultsContainer = document.getElementById('searchResults');
+        resultsContainer.className = `results-container view-${mode}`;
+        
+        // Re-render results with new view mode
+        renderSearchResults();
+      }
+
+      // Render search results
+      function renderSearchResults() {
+        const container = document.getElementById('searchResults');
+        const count = document.getElementById('resultsCount');
+        
+        if (searchResults.length === 0) {
+          container.innerHTML = '<div class="no-results">🔍 Tidak ada hasil yang ditemukan</div>';
+          count.textContent = '0 hasil ditemukan';
+          return;
+        }
+        
+        count.textContent = `${searchResults.length} hasil ditemukan`;
+        
+        // Implementation would render actual search results
+        // This is a placeholder
+        container.innerHTML = '<div class="loading">Memuat hasil pencarian...</div>';
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const mobileNav = document.getElementById('mobileNav');
+        const menuBtn = document.querySelector('.btn-menu');
+        
+        if (mobileNav && menuBtn && !mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+          mobileNav.classList.remove('active');
+        }
+      });
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication
+        if (typeof auth !== 'undefined' && !auth.requireAuth()) {
+          return; // Will redirect to login if not authenticated
+        }
+        
+        // Load initial data
+        if (typeof loadAllAnimals === 'function') {
+          loadAllAnimals();
+        }
+      });
+    </script>
+  </body>
+</html>

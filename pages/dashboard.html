@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Pendataan Hewan PWA</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Dashboard KPI Peternakan - Aplikasi PWA untuk pendataan hewan" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header with Navigation -->
+      <div class="header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1>🐾 Pendataan Hewan</h1>
+            <p>Dashboard KPI Peternakan</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+            <a href="profil.html" class="btn btn-info">👤 Profil</a>
+            <button onclick="logout()" class="btn btn-secondary">🚪 Logout</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
+          <a href="pendataan.html" class="nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="nav-link">📄 Daftar</a>
+          <a href="profil.html" class="nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-content">
+          <a href="dashboard.html" class="mobile-nav-link active">📊 Dashboard</a>
+          <a href="pendataan.html" class="mobile-nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="mobile-nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="mobile-nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="mobile-nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="mobile-nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="mobile-nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="mobile-nav-link">📄 Daftar</a>
+          <a href="profil.html" class="mobile-nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="card">
+          <div class="card-header">
+            <h2>🏠 Dashboard KPI Peternakan</h2>
+            <p>Pantau performa peternakan Anda secara real-time</p>
+          </div>
+        </div>
+        
+        <!-- KPI Cards -->
+        <div class="grid-container">
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="stats-card">
+                <div class="stats-icon">🐄</div>
+                <div class="stats-info">
+                  <div class="stats-number" id="totalAnimals">0</div>
+                  <div class="stats-label">Total Hewan</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card card-success">
+            <div class="card-body">
+              <div class="stats-card">
+                <div class="stats-icon">💚</div>
+                <div class="stats-info">
+                  <div class="stats-number" id="healthyAnimals">0</div>
+                  <div class="stats-label">Hewan Sehat</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card card-warning">
+            <div class="card-body">
+              <div class="stats-card">
+                <div class="stats-icon">⏰</div>
+                <div class="stats-info">
+                  <div class="stats-number" id="scheduledCare">0</div>
+                  <div class="stats-label">Perawatan Terjadwal</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card card-info">
+            <div class="card-body">
+              <div class="stats-card">
+                <div class="stats-icon">📈</div>
+                <div class="stats-info">
+                  <div class="stats-number" id="avgGrowth">0%</div>
+                  <div class="stats-label">Rata-rata Pertumbuhan</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card card-secondary">
+            <div class="card-body">
+              <div class="stats-card">
+                <div class="stats-icon">🌾</div>
+                <div class="stats-info">
+                  <div class="stats-number" id="readyHarvest">0</div>
+                  <div class="stats-label">Siap Panen</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card card-accent">
+            <div class="card-body">
+              <div class="stats-card">
+                <div class="stats-icon">💰</div>
+                <div class="stats-info">
+                  <div class="stats-number" id="monthlyRevenue">Rp 0</div>
+                  <div class="stats-label">Pendapatan Bulan Ini</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🚀 Aksi Cepat</h3>
+          </div>
+          <div class="card-body">
+            <div class="btn-group">
+              <a href="pendataan.html" class="btn btn-primary">
+                ➕ Tambah Hewan Baru
+              </a>
+              <a href="perawatan.html" class="btn btn-success">
+                💉 Jadwal Perawatan
+              </a>
+              <a href="monitoring.html" class="btn btn-info">
+                📏 Input Data Pertumbuhan
+              </a>
+              <a href="panen.html" class="btn btn-warning">
+                📦 Catat Hasil Panen
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📝 Aktivitas Terbaru</h3>
+          </div>
+          <div class="card-body">
+            <div id="recentActivities" class="activity-list">
+              <div class="text-muted text-center">Belum ada aktivitas terbaru</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Pendataan Hewan PWA. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/error-handler.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      // Check authentication on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        // Require authentication
+        if (typeof auth !== 'undefined') {
+          if (!auth.requireAuth()) {
+            return; // Will redirect to login if not authenticated
+          }
+          
+          // Update user info
+          const currentUser = auth.getCurrentUser();
+          if (currentUser) {
+            console.log('Dashboard loaded for user:', currentUser.email);
+            
+            // Update welcome message in header
+            const headerTitle = document.querySelector('.header-title p');
+            if (headerTitle) {
+              headerTitle.textContent = `Selamat datang, ${currentUser.name}!`;
+            }
+          }
+        } else {
+          // Fallback auth check
+          const currentUser = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+          if (!currentUser) {
+            console.log('No authentication found, redirecting to login');
+            window.location.href = 'login.html';
+            return;
+          }
+        }
+      });
+
+      // Logout function
+      function logout() {
+        if (confirm('Apakah Anda yakin ingin logout?')) {
+          if (typeof auth !== 'undefined') {
+            auth.logout();
+          } else {
+            // Fallback logout
+            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
+          }
+          console.log('User logged out, redirecting to login');
+          window.location.href = 'login.html';
+        }
+      }
+
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobileNav');
+        let overlay = document.getElementById('mobileOverlay');
+        
+        if (mobileNav) {
+          const isActive = mobileNav.classList.contains('active');
+          
+          if (isActive) {
+            // Close menu
+            mobileNav.classList.remove('active');
+            if (overlay) overlay.remove();
+          } else {
+            // Open menu
+            mobileNav.classList.add('active');
+            
+            // Create overlay if it doesn't exist
+            if (!overlay) {
+              overlay = document.createElement('div');
+              overlay.id = 'mobileOverlay';
+              overlay.className = 'mobile-nav-overlay active';
+              overlay.onclick = toggleMobileMenu;
+              document.body.appendChild(overlay);
+            }
+          }
+        }
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const mobileNav = document.getElementById('mobileNav');
+        const menuBtn = document.querySelector('.btn-menu');
+        
+        if (mobileNav && menuBtn && !mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+          mobileNav.classList.remove('active');
+        }
+      });
+
+      // Initialize dashboard when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication
+        if (typeof auth !== 'undefined' && !auth.requireAuth()) {
+          return; // Will redirect to login if not authenticated
+        }
+        
+        if (typeof updateDashboard === 'function') {
+          updateDashboard();
+        }
+        if (typeof loadRecentActivities === 'function') {
+          loadRecentActivities();
+        }
+        if (typeof updateUserInfo === 'function') {
+          updateUserInfo();
+        }
+      });
+
+      // Update user info in dashboard
+      function updateUserInfo() {
+        if (typeof auth !== 'undefined') {
+          const userInfo = auth.getUserDisplayInfo();
+          if (userInfo) {
+            // Update welcome message if exists
+            const welcomeElements = document.querySelectorAll('.welcome-user');
+            welcomeElements.forEach(el => {
+              el.textContent = `Selamat datang, ${userInfo.name}!`;
+            });
+
+            // Update farm name in dashboard if exists
+            const farmElements = document.querySelectorAll('.farm-name');
+            farmElements.forEach(el => {
+              el.textContent = userInfo.farmName;
+            });
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

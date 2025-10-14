@@ -9,17 +9,39 @@ let activities = JSON.parse(localStorage.getItem("activities") || "[]");
 
 // Tab functionality
 function showTab(tabName) {
-  // Hide all tabs
-  document.querySelectorAll(".tab-content").forEach((tab) => {
-    tab.classList.remove("active");
-  });
-  document.querySelectorAll(".nav-tab").forEach((tab) => {
-    tab.classList.remove("active");
-  });
+  try {
+    // Hide all tabs
+    const tabContents = document.querySelectorAll(".tab-content");
+    if (tabContents.length > 0) {
+      tabContents.forEach((tab) => {
+        if (tab && tab.classList) {
+          tab.classList.remove("active");
+        }
+      });
+    }
+    
+    const navTabs = document.querySelectorAll(".nav-tab");
+    if (navTabs.length > 0) {
+      navTabs.forEach((tab) => {
+        if (tab && tab.classList) {
+          tab.classList.remove("active");
+        }
+      });
+    }
 
-  // Show selected tab
-  document.getElementById(tabName).classList.add("active");
-  event.target.classList.add("active");
+    // Show selected tab
+    const targetTab = document.getElementById(tabName);
+    if (targetTab && targetTab.classList) {
+      targetTab.classList.add("active");
+    }
+    
+    // Only add active class to event target if it exists and has classList
+    if (typeof event !== 'undefined' && event && event.target && event.target.classList) {
+      event.target.classList.add("active");
+    }
+  } catch (error) {
+    console.error('Error in showTab:', error);
+  }
 
   // Load data for specific tabs
   switch (tabName) {
@@ -1093,6 +1115,86 @@ function loadCareSchedules() {
     .join("");
 }
 
+// Load medical records
+function loadMedicalRecords() {
+  const medicalList = document.getElementById("medicalHistory");
+  if (!medicalList) return;
+
+  if (medicalRecords.length === 0) {
+    medicalList.innerHTML = '<div class="no-data">Belum ada catatan medis</div>';
+    return;
+  }
+
+  // Sort by date (newest first)
+  const sortedRecords = medicalRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  medicalList.innerHTML = sortedRecords
+    .map((record) => {
+      const animal = animals.find((a) => a.id === record.animalId);
+      return `
+        <div class="medical-record-item">
+          <div class="record-header">
+            <div class="record-date">${new Date(record.date).toLocaleDateString("id-ID")}</div>
+            <div class="record-type">${record.type}</div>
+          </div>
+          <div class="record-animal">
+            <strong>${animal ? animal.name : "Hewan tidak ditemukan"}</strong>
+            ${animal ? `(${animal.species})` : ""}
+          </div>
+          ${record.symptoms ? `<div class="record-symptoms"><strong>Gejala:</strong> ${record.symptoms}</div>` : ""}
+          ${record.diagnosis ? `<div class="record-diagnosis"><strong>Diagnosis:</strong> ${record.diagnosis}</div>` : ""}
+          ${record.treatment ? `<div class="record-treatment"><strong>Pengobatan:</strong> ${record.treatment}</div>` : ""}
+          ${record.veterinarian ? `<div class="record-vet"><strong>Dokter:</strong> ${record.veterinarian}</div>` : ""}
+          ${record.cost ? `<div class="record-cost"><strong>Biaya:</strong> Rp ${record.cost.toLocaleString("id-ID")}</div>` : ""}
+        </div>
+      `;
+    })
+    .join("");
+}
+
+// Load medical history for selected animal
+function loadMedicalHistory() {
+  const selectedAnimalId = document.getElementById("selectAnimalMedical")?.value;
+  const medicalList = document.getElementById("medicalHistory");
+  
+  if (!medicalList) return;
+
+  if (!selectedAnimalId) {
+    medicalList.innerHTML = '<div class="no-data">Pilih hewan untuk melihat riwayat medis</div>';
+    return;
+  }
+
+  const animalRecords = medicalRecords.filter(record => record.animalId === selectedAnimalId);
+  
+  if (animalRecords.length === 0) {
+    medicalList.innerHTML = '<div class="no-data">Belum ada catatan medis untuk hewan ini</div>';
+    return;
+  }
+
+  // Sort by date (newest first)
+  const sortedRecords = animalRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
+  const animal = animals.find(a => a.id === selectedAnimalId);
+
+  medicalList.innerHTML = `
+    <div class="medical-header">
+      <h4>📋 Riwayat Medis: ${animal ? animal.name : 'Hewan'}</h4>
+    </div>
+    ${sortedRecords.map((record) => `
+      <div class="medical-record-item">
+        <div class="record-header">
+          <div class="record-date">${new Date(record.date).toLocaleDateString("id-ID")}</div>
+          <div class="record-type">${record.type}</div>
+        </div>
+        ${record.symptoms ? `<div class="record-symptoms"><strong>Gejala:</strong> ${record.symptoms}</div>` : ""}
+        ${record.diagnosis ? `<div class="record-diagnosis"><strong>Diagnosis:</strong> ${record.diagnosis}</div>` : ""}
+        ${record.treatment ? `<div class="record-treatment"><strong>Pengobatan:</strong> ${record.treatment}</div>` : ""}
+        ${record.veterinarian ? `<div class="record-vet"><strong>Dokter:</strong> ${record.veterinarian}</div>` : ""}
+        ${record.cost ? `<div class="record-cost"><strong>Biaya:</strong> Rp ${record.cost.toLocaleString("id-ID")}</div>` : ""}
+      </div>
+    `).join("")}
+  `;
+}
+
 // Load animals for dropdowns
 function loadAnimalsForDropdowns() {
   // Load animals for vaccination form
@@ -1118,23 +1220,65 @@ function loadAnimalsForDropdowns() {
       scheduleSelect.appendChild(option);
     });
   }
+
+  // Load animals for medical records form
+  const medicalSelect = document.getElementById("selectAnimalMedical");
+  if (medicalSelect) {
+    medicalSelect.innerHTML = '<option value="">-- Pilih Hewan --</option>';
+    animals.forEach((animal) => {
+      const option = document.createElement("option");
+      option.value = animal.id;
+      option.textContent = `${animal.name} (${animal.species}) - ID: ${animal.animalId}`;
+      medicalSelect.appendChild(option);
+    });
+  }
 }
 
 // Initialize app when page loads
 document.addEventListener("DOMContentLoaded", function () {
-  // Load initial data
-  updateDashboard();
-  loadAnimalsForDropdowns();
-  loadAnimalsForMonitoring();
-  loadAnimalsForHarvest();
+  try {
+    // Only initialize relevant functions based on current page
+    const currentPath = window.location.pathname;
+    
+    // Wait a bit for DOM to fully load
+    setTimeout(() => {
+      try {
+        // Load initial data that's always needed
+        if (typeof updateDashboard === 'function') {
+          updateDashboard();
+        }
+        
+        if (typeof loadAnimalsForDropdowns === 'function') {
+          loadAnimalsForDropdowns();
+        }
+        
+        if (typeof loadAnimalsForMonitoring === 'function') {
+          loadAnimalsForMonitoring();
+        }
+        
+        if (typeof loadAnimalsForHarvest === 'function') {
+          loadAnimalsForHarvest();
+        }
 
-  // Set default tab
-  showTab("dashboard");
+        // Set default tab only if we're on the main index page and dashboard tab exists
+        if ((currentPath.includes('index.html') || currentPath === '/') && document.getElementById('dashboard')) {
+          showTab("dashboard");
+        }
 
-  // Generate first animal ID
-  generateAnimalId();
+        // Generate first animal ID if on pendataan page
+        if (currentPath.includes('pendataan') && typeof generateAnimalId === 'function') {
+          generateAnimalId();
+        }
 
-  console.log("Hewanku Super App initialized successfully!");
+        console.log("Hewanku Super App initialized successfully!");
+      } catch (innerError) {
+        console.error("Error in delayed initialization:", innerError);
+      }
+    }, 100);
+    
+  } catch (error) {
+    console.error("Error initializing app:", error);
+  }
 });
 
 // Update KPI Dashboard
@@ -1187,3 +1331,299 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 });
+
+// Missing Modal Functions
+function showAddScheduleModal() {
+  // Create modal HTML if it doesn't exist
+  let modal = document.getElementById('scheduleModal');
+  if (!modal) {
+    const modalHTML = `
+      <div id="scheduleModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>📅 Tambah Jadwal Perawatan</h3>
+            <span class="close" onclick="closeScheduleModal()">&times;</span>
+          </div>
+          <div class="modal-body">
+            <form id="scheduleForm">
+              <div class="form-group">
+                <label for="scheduleAnimal">Pilih Hewan:</label>
+                <select id="scheduleAnimal" required>
+                  <option value="">-- Pilih Hewan --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="scheduleDate">Tanggal:</label>
+                <input type="date" id="scheduleDate" required>
+              </div>
+              <div class="form-group">
+                <label for="scheduleTime">Waktu:</label>
+                <input type="time" id="scheduleTime" required>
+              </div>
+              <div class="form-group">
+                <label for="scheduleType">Jenis Perawatan:</label>
+                <select id="scheduleType" required>
+                  <option value="vaksinasi">💉 Vaksinasi</option>
+                  <option value="pemeriksaan">🩺 Pemeriksaan Rutin</option>
+                  <option value="pengobatan">💊 Pengobatan</option>
+                  <option value="grooming">✂️ Grooming</option>
+                  <option value="lainnya">🔸 Lainnya</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="scheduleNotes">Catatan:</label>
+                <textarea id="scheduleNotes" rows="3"></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Simpan Jadwal</button>
+                <button type="button" class="btn btn-secondary" onclick="closeScheduleModal()">Batal</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Add form submit handler
+    document.getElementById('scheduleForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      saveSchedule();
+    });
+  }
+  
+  // Populate animal dropdown
+  const animalSelect = document.getElementById('scheduleAnimal');
+  if (animalSelect && animals.length > 0) {
+    animalSelect.innerHTML = '<option value="">-- Pilih Hewan --</option>';
+    animals.forEach(animal => {
+      const option = document.createElement('option');
+      option.value = animal.id;
+      option.textContent = `${animal.name} (${animal.species})`;
+      animalSelect.appendChild(option);
+    });
+  }
+  
+  // Show modal
+  document.getElementById('scheduleModal').style.display = 'block';
+}
+
+function closeScheduleModal() {
+  const modal = document.getElementById('scheduleModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+function saveSchedule() {
+  const formData = {
+    id: Date.now(),
+    animalId: document.getElementById('scheduleAnimal').value,
+    date: document.getElementById('scheduleDate').value,
+    time: document.getElementById('scheduleTime').value,
+    type: document.getElementById('scheduleType').value,
+    notes: document.getElementById('scheduleNotes').value,
+    status: 'scheduled',
+    createdAt: new Date().toISOString()
+  };
+  
+  if (!formData.animalId || !formData.date || !formData.time || !formData.type) {
+    alert('Mohon lengkapi semua field yang wajib diisi');
+    return;
+  }
+  
+  // Add to schedules array
+  careSchedules.push(formData);
+  localStorage.setItem('careSchedules', JSON.stringify(careSchedules));
+  
+  // Add activity
+  const animal = animals.find(a => a.id === formData.animalId);
+  if (animal) {
+    addActivity(`Jadwal ${formData.type} dibuat untuk ${animal.name}`, 'schedule');
+  }
+  
+  // Close modal and refresh
+  closeScheduleModal();
+  loadCareSchedules();
+  updateDashboard();
+  
+  alert('✅ Jadwal berhasil disimpan!');
+}
+
+function showAddMedicalRecordModal() {
+  // Create modal HTML if it doesn't exist
+  let modal = document.getElementById('medicalModal');
+  if (!modal) {
+    const modalHTML = `
+      <div id="medicalModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>🏥 Tambah Catatan Medis</h3>
+            <span class="close" onclick="closeMedicalModal()">&times;</span>
+          </div>
+          <div class="modal-body">
+            <form id="medicalForm">
+              <div class="form-group">
+                <label for="medicalAnimal">Pilih Hewan:</label>
+                <select id="medicalAnimal" required>
+                  <option value="">-- Pilih Hewan --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="medicalDate">Tanggal Pemeriksaan:</label>
+                <input type="date" id="medicalDate" required>
+              </div>
+              <div class="form-group">
+                <label for="medicalType">Jenis Pemeriksaan:</label>
+                <select id="medicalType" required>
+                  <option value="pemeriksaan">🩺 Pemeriksaan Rutin</option>
+                  <option value="vaksinasi">💉 Vaksinasi</option>
+                  <option value="pengobatan">💊 Pengobatan</option>
+                  <option value="operasi">⚕️ Operasi</option>
+                  <option value="emergency">🚨 Darurat</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="medicalSymptoms">Gejala/Keluhan:</label>
+                <textarea id="medicalSymptoms" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="medicalDiagnosis">Diagnosis:</label>
+                <textarea id="medicalDiagnosis" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="medicalTreatment">Pengobatan/Tindakan:</label>
+                <textarea id="medicalTreatment" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="medicalVet">Dokter Hewan:</label>
+                <input type="text" id="medicalVet">
+              </div>
+              <div class="form-group">
+                <label for="medicalCost">Biaya (Rp):</label>
+                <input type="number" id="medicalCost" min="0">
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Simpan Catatan</button>
+                <button type="button" class="btn btn-secondary" onclick="closeMedicalModal()">Batal</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Add form submit handler
+    document.getElementById('medicalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      saveMedicalRecord();
+    });
+  }
+  
+  // Populate animal dropdown
+  const animalSelect = document.getElementById('medicalAnimal');
+  if (animalSelect && animals.length > 0) {
+    animalSelect.innerHTML = '<option value="">-- Pilih Hewan --</option>';
+    animals.forEach(animal => {
+      const option = document.createElement('option');
+      option.value = animal.id;
+      option.textContent = `${animal.name} (${animal.species})`;
+      animalSelect.appendChild(option);
+    });
+  }
+  
+  // Show modal
+  document.getElementById('medicalModal').style.display = 'block';
+}
+
+function closeMedicalModal() {
+  const modal = document.getElementById('medicalModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+function saveMedicalRecord() {
+  const formData = {
+    id: Date.now(),
+    animalId: document.getElementById('medicalAnimal').value,
+    date: document.getElementById('medicalDate').value,
+    type: document.getElementById('medicalType').value,
+    symptoms: document.getElementById('medicalSymptoms').value,
+    diagnosis: document.getElementById('medicalDiagnosis').value,
+    treatment: document.getElementById('medicalTreatment').value,
+    veterinarian: document.getElementById('medicalVet').value,
+    cost: parseFloat(document.getElementById('medicalCost').value) || 0,
+    createdAt: new Date().toISOString()
+  };
+  
+  if (!formData.animalId || !formData.date || !formData.type) {
+    alert('Mohon lengkapi field yang wajib diisi');
+    return;
+  }
+  
+  // Add to medical records array
+  medicalRecords.push(formData);
+  localStorage.setItem('medicalRecords', JSON.stringify(medicalRecords));
+  
+  // Add activity
+  const animal = animals.find(a => a.id === formData.animalId);
+  if (animal) {
+    addActivity(`Catatan medis ${formData.type} ditambahkan untuk ${animal.name}`, 'medical');
+  }
+  
+  // Close modal and refresh
+  closeMedicalModal();
+  loadMedicalRecords();
+  updateDashboard();
+  
+  alert('✅ Catatan medis berhasil disimpan!');
+}
+
+// Show medical records for specific animal (can be called from other pages)
+function showAnimalMedicalRecords(animalId) {
+  const records = JSON.parse(localStorage.getItem('medicalRecords') || '[]');
+  const animals = JSON.parse(localStorage.getItem('animals') || '[]');
+  
+  const animalRecords = records.filter(record => record.animalId === animalId);
+  const animal = animals.find(a => a.id === animalId);
+  
+  if (!animal) {
+    alert('Hewan tidak ditemukan');
+    return;
+  }
+  
+  // Create modal to show medical records
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.display = 'block';
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width: 600px;">
+      <span class="close" onclick="this.closest('.modal').remove()">&times;</span>
+      <div class="medical-header">
+        <h4>Riwayat Medis - ${animal.name}</h4>
+      </div>
+      <div style="max-height: 400px; overflow-y: auto;">
+        ${animalRecords.length === 0 ? 
+          '<p class="no-data">Belum ada catatan medis untuk hewan ini</p>' :
+          animalRecords.sort((a, b) => new Date(b.date) - new Date(a.date))
+            .map(record => `
+              <div class="medical-record-card">
+                <div class="record-header">
+                  <strong>${record.type}</strong>
+                  <span class="record-date">${formatDate(record.date)}</span>
+                </div>
+                <div class="record-content">
+                  <p><strong>Keterangan:</strong> ${record.description}</p>
+                  ${record.medication ? `<p><strong>Obat:</strong> ${record.medication}</p>` : ''}
+                  ${record.cost ? `<p><strong>Biaya:</strong> Rp ${parseInt(record.cost).toLocaleString('id-ID')}</p>` : ''}
+                </div>
+              </div>
+            `).join('')
+        }
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}

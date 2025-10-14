@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Pendataan Hewan PWA</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />   <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Masuk ke aplikasi Pendataan Hewan PWA" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body class="login-page">
+    <div class="login-container">
+      <!-- Header -->
+      <div class="login-header">
+        <div class="app-logo">
+          <h1>🐾 Pendataan Hewan</h1>
+          <p>Sistem Manajemen Peternakan Digital</p>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <div class="login-form-container">
+        <div class="card">
+          <div class="card-header">
+            <h2>🔐 Masuk ke Akun</h2>
+            <p>Silahkan masuk untuk mengakses dashboard</p>
+          </div>
+          
+          <div class="card-body">
+            <!-- Login Form -->
+            <form id="loginForm" class="form">
+              <div class="form-group">
+                <label for="email">📧 Email</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  required 
+                  placeholder="Masukkan email Anda"
+                  autocomplete="email"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="password">🔒 Password</label>
+                <div class="input-group">
+                  <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    placeholder="Masukkan password Anda"
+                    autocomplete="current-password"
+                    class="form-control"
+                  />
+                  <button type="button" class="btn btn-secondary" onclick="togglePassword()">👁️</button>
+                </div>
+              </div>
+
+              <div class="form-options">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="rememberMe" />
+                  <span class="checkmark"></span>
+                  Ingat saya
+                </label>
+                <a href="#" class="text-primary" onclick="showForgotPassword()">Lupa password?</a>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-full">
+                🚀 Masuk
+              </button>
+
+              <div class="alert alert-danger" id="loginError" style="display: none;">
+                <!-- Error messages will be shown here -->
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Social Login -->
+        <div class="card">
+          <div class="card-body">
+            <div class="text-center mb-4">
+              <div class="divider">atau masuk dengan</div>
+            </div>
+            
+            <div class="btn-group">
+              <button class="btn btn-outline-primary" onclick="loginWithGoogle()">
+                🔴 Google
+              </button>
+              <button class="btn btn-outline-secondary" onclick="loginAsGuest()">
+                👤 Masuk sebagai Tamu
+              </button>
+            </div>
+          </div>
+        </div>
+
+          <!-- Register Link -->
+          <div class="register-link">
+            <p>Belum punya akun? <a href="#" onclick="showRegister()">Daftar sekarang</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Register Form (Hidden by default) -->
+      <div class="register-form-container" id="registerContainer" style="display: none;">
+        <div class="login-form-wrapper">
+          <h2>📝 Daftar Akun Baru</h2>
+          <p class="login-subtitle">Buat akun untuk mulai mengelola peternakan</p>
+
+          <form id="registerForm" class="login-form">
+            <div class="form-group">
+              <label for="regFullName">👤 Nama Lengkap</label>
+              <input 
+                type="text" 
+                id="regFullName" 
+                name="fullName" 
+                required 
+                placeholder="Masukkan nama lengkap"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="regEmail">📧 Email</label>
+              <input 
+                type="email" 
+                id="regEmail" 
+                name="email" 
+                required 
+                placeholder="Masukkan email Anda"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="regPassword">🔒 Password</label>
+              <div class="password-input">
+                <input 
+                  type="password" 
+                  id="regPassword" 
+                  name="password" 
+                  required 
+                  placeholder="Buat password (min. 6 karakter)"
+                />
+                <button type="button" class="password-toggle" onclick="toggleRegisterPassword()">👁️</button>
+              </div>
+              <div class="password-strength" id="passwordStrength"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="regConfirmPassword">🔒 Konfirmasi Password</label>
+              <input 
+                type="password" 
+                id="regConfirmPassword" 
+                name="confirmPassword" 
+                required 
+                placeholder="Ulangi password"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="regPhone">📱 Nomor Telepon (Opsional)</label>
+              <input 
+                type="tel" 
+                id="regPhone" 
+                name="phone" 
+                placeholder="Contoh: 08123456789"
+              />
+            </div>
+
+            <div class="form-options">
+              <label class="checkbox-container">
+                <input type="checkbox" id="agreeTerms" required />
+                <span class="checkmark"></span>
+                Saya setuju dengan <a href="#">Syarat & Ketentuan</a>
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              ✨ Daftar Sekarang
+            </button>
+
+            <div class="login-error" id="registerError" style="display: none;">
+              <!-- Error messages will be shown here -->
+            </div>
+          </form>
+
+          <div class="register-link">
+            <p>Sudah punya akun? <a href="#" onclick="showLogin()">Masuk di sini</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forgot Password Form (Hidden by default) -->
+      <div class="forgot-form-container" id="forgotContainer" style="display: none;">
+        <div class="login-form-wrapper">
+          <h2>🔑 Reset Password</h2>
+          <p class="login-subtitle">Masukkan email untuk reset password</p>
+
+          <form id="forgotForm" class="login-form">
+            <div class="form-group">
+              <label for="forgotEmail">📧 Email</label>
+              <input 
+                type="email" 
+                id="forgotEmail" 
+                name="email" 
+                required 
+                placeholder="Masukkan email terdaftar"
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              📧 Kirim Link Reset
+            </button>
+
+            <div class="login-error" id="forgotError" style="display: none;">
+              <!-- Error messages will be shown here -->
+            </div>
+          </form>
+
+          <div class="register-link">
+            <p><a href="#" onclick="showLogin()">← Kembali ke Login</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Sedang memproses...</p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="login-footer">
+        <p>&copy; 2025 Pendataan Hewan PWA. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Bantuan</a> • 
+          <a href="#">Kebijakan Privasi</a> • 
+          <a href="#">Syarat Layanan</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/error-handler.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script>
+      // Override console.error to filter extension errors
+      const originalConsoleError = console.error;
+      console.error = function(...args) {
+        // Skip extension-related errors
+        if (args.length > 0 && args[0] && typeof args[0] === 'string' && (
+            args[0].includes('chrome-extension://') ||
+            args[0].includes('adblock') ||
+            args[0].includes('FingerPrint') ||
+            args[0].includes('Ex.js') ||
+            args[0].includes('counter.js') ||
+            args[0].includes('Cannot read properties of undefined') && 
+            JSON.stringify(args).includes('chrome-extension://')
+        )) {
+          return; // Silent ignore
+        }
+        // Call original console.error for legitimate errors
+        originalConsoleError.apply(console, args);
+      };
+
+      // Show/hide different forms
+      function showLogin() {
+        document.querySelector('.login-form-container').style.display = 'block';
+        document.getElementById('registerContainer').style.display = 'none';
+        document.getElementById('forgotContainer').style.display = 'none';
+      }
+
+      function showRegister() {
+        document.querySelector('.login-form-container').style.display = 'none';
+        document.getElementById('registerContainer').style.display = 'block';
+        document.getElementById('forgotContainer').style.display = 'none';
+      }
+
+      function showForgotPassword() {
+        document.querySelector('.login-form-container').style.display = 'none';
+        document.getElementById('registerContainer').style.display = 'none';
+        document.getElementById('forgotContainer').style.display = 'block';
+      }
+
+      // Toggle password visibility
+      function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = passwordInput.nextElementSibling;
+        
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          toggleBtn.textContent = '🙈';
+        } else {
+          passwordInput.type = 'password';
+          toggleBtn.textContent = '👁️';
+        }
+      }
+
+      function toggleRegisterPassword() {
+        const passwordInput = document.getElementById('regPassword');
+        const toggleBtn = passwordInput.nextElementSibling;
+        
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          toggleBtn.textContent = '🙈';
+        } else {
+          passwordInput.type = 'password';
+          toggleBtn.textContent = '👁️';
+        }
+      }
+
+      // Password strength checker
+      function checkPasswordStrength(password) {
+        const strengthDiv = document.getElementById('passwordStrength');
+        if (!strengthDiv) return;
+
+        let strength = 0;
+        let feedback = '';
+
+        if (password.length >= 6) strength++;
+        if (password.match(/[a-z]/)) strength++;
+        if (password.match(/[A-Z]/)) strength++;
+        if (password.match(/[0-9]/)) strength++;
+        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+        switch (strength) {
+          case 0:
+          case 1:
+            feedback = '🔴 Lemah';
+            strengthDiv.className = 'password-strength weak';
+            break;
+          case 2:
+          case 3:
+            feedback = '🟡 Sedang';
+            strengthDiv.className = 'password-strength medium';
+            break;
+          case 4:
+          case 5:
+            feedback = '🟢 Kuat';
+            strengthDiv.className = 'password-strength strong';
+            break;
+        }
+
+        strengthDiv.textContent = feedback;
+      }
+
+      // Show loading overlay
+      function showLoading() {
+        document.getElementById('loadingOverlay').style.display = 'flex';
+      }
+
+      function hideLoading() {
+        document.getElementById('loadingOverlay').style.display = 'none';
+      }
+
+      // Show error message
+      function showError(elementId, message) {
+        const errorDiv = document.getElementById(elementId);
+        if (errorDiv) {
+          errorDiv.innerHTML = `<div style="color: #dc3545; background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 4px; margin-top: 10px;">
+            ❌ ${message}
+          </div>`;
+          errorDiv.style.display = 'block';
+          
+          // Auto hide after 6 seconds
+          setTimeout(() => {
+            errorDiv.style.display = 'none';
+          }, 6000);
+        }
+      }
+
+      // Show success message
+      function showSuccess(message) {
+        const successDiv = document.createElement('div');
+        successDiv.innerHTML = `<div style="color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 4px; margin-top: 10px;">
+          ✅ ${message}
+        </div>`;
+        document.querySelector('.form').appendChild(successDiv);
+        
+        setTimeout(() => {
+          if (successDiv.parentNode) {
+            successDiv.remove();
+          }
+        }, 3000);
+      }
+
+      // Login form handler
+      document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+
+        // Clear previous errors
+        document.getElementById('loginError').style.display = 'none';
+
+        if (!email || !password) {
+          showError('loginError', 'Email dan password harus diisi');
+          return;
+        }
+
+        showLoading();
+
+        try {
+          // Use auth system
+          if (typeof auth !== 'undefined') {
+            await auth.login(email, password, rememberMe);
+            
+            // Login successful - redirect to dashboard
+            console.log('Login successful, redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+          } else {
+            // Fallback if auth system not available
+            console.warn('Auth system not available, using fallback');
+            if (email && password.length >= 6) {
+              // Store basic user info for fallback
+              sessionStorage.setItem('currentUser', JSON.stringify({
+                email: email,
+                name: email.split('@')[0],
+                loginTime: new Date().toISOString(),
+                type: 'fallback'
+              }));
+              window.location.href = 'dashboard.html';
+            } else {
+              showError('loginError', 'Email atau password salah');
+            }
+          }
+        } catch (error) {
+          console.error('Login error:', error);
+          showError('loginError', error.message || 'Terjadi kesalahan saat login');
+        } finally {
+          hideLoading();
+        }
+      });
+
+      // Register form handler
+      document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const fullName = document.getElementById('regFullName').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('regConfirmPassword').value;
+        const phone = document.getElementById('regPhone').value;
+        const agreeTerms = document.getElementById('agreeTerms').checked;
+
+        // Validation
+        if (password !== confirmPassword) {
+          showError('registerError', 'Konfirmasi password tidak cocok');
+          return;
+        }
+
+        if (password.length < 6) {
+          showError('registerError', 'Password minimal 6 karakter');
+          return;
+        }
+
+        if (!agreeTerms) {
+          showError('registerError', 'Anda harus menyetujui syarat dan ketentuan');
+          return;
+        }
+
+        showLoading();
+
+        try {
+          // Simulate registration process
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          // Use auth system
+          if (typeof auth !== 'undefined') {
+            const success = await auth.register({
+              name: fullName,
+              email: email,
+              password: password,
+              phone: phone
+            });
+            
+            if (success) {
+              alert('✅ Registrasi berhasil! Silahkan login.');
+              showLogin();
+            } else {
+              showError('registerError', 'Email sudah terdaftar');
+            }
+          } else {
+            // Fallback
+            alert('✅ Registrasi berhasil! Silahkan login.');
+            showLogin();
+          }
+        } catch (error) {
+          console.error('Registration error:', error);
+          showError('registerError', 'Terjadi kesalahan saat registrasi');
+        } finally {
+          hideLoading();
+        }
+      });
+
+      // Forgot password form handler
+      document.getElementById('forgotForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('forgotEmail').value;
+
+        showLoading();
+
+        try {
+          // Simulate forgot password process
+          await new Promise(resolve => setTimeout(resolve, 1500));
+
+          alert('📧 Link reset password telah dikirim ke email Anda');
+          showLogin();
+        } catch (error) {
+          console.error('Forgot password error:', error);
+          showError('forgotError', 'Terjadi kesalahan saat mengirim email');
+        } finally {
+          hideLoading();
+        }
+      });
+
+      // Social login functions
+      async function loginWithGoogle() {
+        showLoading();
+        
+        try {
+          // Simulate Google login
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          if (typeof auth !== 'undefined') {
+            const success = await auth.loginWithGoogle();
+            if (success) {
+              window.location.href = 'dashboard.html';
+            } else {
+              showError('loginError', 'Gagal login dengan Google');
+            }
+          } else {
+            // Fallback
+            window.location.href = 'dashboard.html';
+          }
+        } catch (error) {
+          console.error('Google login error:', error);
+          showError('loginError', 'Gagal login dengan Google');
+        } finally {
+          hideLoading();
+        }
+      }
+
+      async function loginAsGuest() {
+        showLoading();
+        
+        try {
+          // Simulate guest login
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          if (typeof auth !== 'undefined') {
+            auth.loginAsGuest();
+          }
+          
+          window.location.href = 'dashboard.html';
+        } catch (error) {
+          console.error('Guest login error:', error);
+          showError('loginError', 'Gagal login sebagai tamu');
+        } finally {
+          hideLoading();
+        }
+      }
+
+      // Password strength checking
+      document.getElementById('regPassword').addEventListener('input', function() {
+        checkPasswordStrength(this.value);
+      });
+
+      // Auto-fill demo credentials
+      function fillDemoCredentials() {
+        document.getElementById('email').value = 'demo@pendataanhewan.com';
+        document.getElementById('password').value = 'demo123';
+        
+        // Show success message
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'alert alert-info';
+        infoDiv.innerHTML = '✅ Kredensial demo telah diisi. Klik "Masuk" untuk login.';
+        infoDiv.style.cssText = 'margin-top: 10px; padding: 10px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; color: #1976d2;';
+        
+        const form = document.getElementById('loginForm');
+        form.appendChild(infoDiv);
+        
+        setTimeout(() => {
+          if (infoDiv.parentNode) {
+            infoDiv.remove();
+          }
+        }, 3000);
+      }
+
+      // Initialize page
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is already logged in
+        if (typeof auth !== 'undefined' && auth.isLoggedIn()) {
+          window.location.href = 'dashboard.html';
+          return;
+        }
+
+        // Add demo button and info for development
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+          const demoInfo = document.createElement('div');
+          demoInfo.className = 'demo-info';
+          demoInfo.innerHTML = `
+            <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-top: 15px; font-size: 0.875rem;">
+              <h4 style="margin: 0 0 10px 0; color: #495057;">🔧 Demo Credentials</h4>
+              <p style="margin: 5px 0;"><strong>Email:</strong> demo@pendataanhewan.com</p>
+              <p style="margin: 5px 0;"><strong>Password:</strong> demo123</p>
+              <p style="margin: 10px 0 5px 0; font-style: italic; color: #6c757d;">Atau gunakan email apa saja dengan password minimal 6 karakter</p>
+              <button type="button" onclick="fillDemoCredentials()" class="btn btn-outline-primary btn-sm" style="margin-top: 8px;">
+                Auto Fill Demo
+              </button>
+            </div>
+          `;
+          document.querySelector('.form').appendChild(demoInfo);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoring Pertumbuhan - Pendataan Hewan PWA</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />`n    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Pantau dan analisis perkembangan fisik hewan ternak" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header with Navigation -->
+      <div class="header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1>🐾 Pendataan Hewan</h1>
+            <p>Monitoring Pertumbuhan Hewan</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+            <a href="profil.html" class="btn btn-info">👤 Profil</a>
+            <a href="../index.html" class="btn btn-secondary">🏠 Home</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="nav-link active">📈 Monitoring</a>
+          <a href="panen.html" class="nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="nav-link">📄 Daftar</a>
+          <a href="profil.html" class="nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-content">
+          <a href="dashboard.html" class="mobile-nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="mobile-nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="mobile-nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="mobile-nav-link active">📈 Monitoring</a>
+          <a href="panen.html" class="mobile-nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="mobile-nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="mobile-nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="mobile-nav-link">📄 Daftar</a>
+          <a href="profil.html" class="mobile-nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="module-header">
+          <h2>📈 Monitoring Pertumbuhan</h2>
+          <p>Pantau dan analisis perkembangan fisik hewan ternak</p>
+        </div>
+
+        <div class="monitoring-section">
+          <!-- Animal Selector -->
+          <div class="animal-selector-section">
+            <div class="form-group">
+              <label for="selectAnimalMonitoring">Pilih Hewan untuk Monitoring:</label>
+              <select id="selectAnimalMonitoring" onchange="loadGrowthData()">
+                <option value="">-- Pilih Hewan --</option>
+                <!-- Will be populated by JavaScript -->
+              </select>
+            </div>
+          </div>
+
+          <!-- Growth Input Form -->
+          <div class="growth-input">
+            <h3>📊 Input Data Pertumbuhan</h3>
+            <form id="growthForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="measureDate">Tanggal Pengukuran</label>
+                  <input type="date" id="measureDate" required />
+                </div>
+                <div class="form-group">
+                  <label for="currentWeight">Berat Badan (kg)</label>
+                  <input type="number" id="currentWeight" step="0.1" min="0" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="currentHeight">Tinggi (cm)</label>
+                  <input type="number" id="currentHeight" step="0.1" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="currentLength">Panjang (cm)</label>
+                  <input type="number" id="currentLength" step="0.1" min="0" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="growthNotes">Catatan Pertumbuhan</label>
+                <textarea id="growthNotes" rows="2" placeholder="Kondisi fisik, nafsu makan, dll"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                💾 Simpan Data Pertumbuhan
+              </button>
+            </form>
+          </div>
+
+          <!-- Growth Charts -->
+          <div class="growth-charts">
+            <h3>📈 Grafik Pertumbuhan</h3>
+            <div class="chart-container">
+              <canvas id="growthChart" width="400" height="200"></canvas>
+            </div>
+            
+            <div class="growth-analysis">
+              <h4>📊 Analisis Pertumbuhan</h4>
+              <div id="growthAnalysis" class="analysis-cards">
+                <!-- Analysis results will be shown here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Growth Alerts -->
+          <div class="growth-alerts">
+            <h3>⚠️ Peringatan Pertumbuhan</h3>
+            <div id="growthAlerts" class="alert-list">
+              <!-- Alerts will be displayed here -->
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Pendataan Hewan PWA. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/error-handler.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobileNav');
+        if (mobileNav) {
+          mobileNav.classList.toggle('active');
+        }
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const mobileNav = document.getElementById('mobileNav');
+        const menuBtn = document.querySelector('.btn-menu');
+        
+        if (mobileNav && menuBtn && !mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+          mobileNav.classList.remove('active');
+        }
+      });
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication
+        if (typeof auth !== 'undefined' && !auth.requireAuth()) {
+          return; // Will redirect to login if not authenticated
+        }
+        
+        if (typeof loadAnimalsForMonitoring === 'function') {
+          loadAnimalsForMonitoring();
+        }
+      });
+    </script>
+  </body>
+</html>

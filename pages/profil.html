@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil Pengguna - Pendataan Hewan PWA</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Kelola profil pengguna dan pengaturan aplikasi" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header with Navigation -->
+      <div class="header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1>🐾 Pendataan Hewan</h1>
+            <p>Profil & Pengaturan</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+            <a href="../index.html" class="btn btn-secondary">🏠 Home</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="nav-link">📄 Daftar</a>
+          <a href="profil.html" class="nav-link active">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-content">
+          <a href="dashboard.html" class="mobile-nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="mobile-nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="mobile-nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="mobile-nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="mobile-nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="mobile-nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="mobile-nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="mobile-nav-link">📄 Daftar</a>
+          <a href="profil.html" class="mobile-nav-link active">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="module-header">
+          <h2>👤 Profil Pengguna</h2>
+          <p>Kelola informasi akun dan pengaturan aplikasi</p>
+        </div>
+
+        <div class="profile-section">
+          <!-- Profile Tabs -->
+          <div class="tabs">
+            <button class="tab-button active" onclick="showTab('profile')">👤 Profil</button>
+            <button class="tab-button" onclick="showTab('farm')">🏡 Peternakan</button>
+            <button class="tab-button" onclick="showTab('settings')">⚙️ Pengaturan</button>
+            <button class="tab-button" onclick="showTab('security')">🔒 Keamanan</button>
+            <button class="tab-button" onclick="showTab('about')">ℹ️ Tentang</button>
+          </div>
+
+          <!-- Profile Tab -->
+          <div id="profile" class="tab-content active">
+            <h3">👤 Informasi Profil</h3>
+            
+            <div class="profile-header">
+              <div class="profile-avatar">
+                <div class="avatar-container" id="avatarContainer">
+                  <img id="profilePhoto" src="" alt="Foto Profil" style="display: none;" />
+                  <div id="avatarPlaceholder" class="avatar-placeholder">👤</div>
+                </div>
+                <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="handlePhotoUpload()" />
+                <button class="btn btn-outline" onclick="document.getElementById('photoInput').click()">
+                  📷 Ubah Foto
+                </button>
+              </div>
+              
+              <div class="profile-status">
+                <div class="status-item">
+                  <strong>Status Akun:</strong>
+                  <span id="accountStatus" class="status-badge">Aktif</span>
+                </div>
+                <div class="status-item">
+                  <strong>Bergabung:</strong>
+                  <span id="joinDate">-</span>
+                </div>
+                <div class="status-item">
+                  <strong>Login Terakhir:</strong>
+                  <span id="lastLogin">-</span>
+                </div>
+              </div>
+            </div>
+
+            <form id="profileForm" class="profile-form">
+              <div class="form-section">
+                <h4>📋 Informasi Dasar</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="fullName">Nama Lengkap</label>
+                    <input type="text" id="fullName" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="phone">Nomor Telepon</label>
+                    <input type="tel" id="phone" />
+                  </div>
+                  <div class="form-group">
+                    <label for="birthDate">Tanggal Lahir</label>
+                    <input type="date" id="birthDate" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h4>📍 Alamat</h4>
+                <div class="form-group">
+                  <label for="address">Alamat Lengkap</label>
+                  <textarea id="address" rows="3"></textarea>
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="city">Kota</label>
+                    <input type="text" id="city" />
+                  </div>
+                  <div class="form-group">
+                    <label for="province">Provinsi</label>
+                    <input type="text" id="province" />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="postalCode">Kode Pos</label>
+                    <input type="text" id="postalCode" />
+                  </div>
+                  <div class="form-group">
+                    <label for="country">Negara</label>
+                    <input type="text" id="country" value="Indonesia" readonly />
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                💾 Simpan Perubahan
+              </button>
+            </form>
+          </div>
+
+          <!-- Farm Information Tab -->
+          <div id="farm" class="tab-content">
+            <h3>🏡 Informasi Peternakan</h3>
+            
+            <form id="farmForm" class="farm-form">
+              <div class="form-section">
+                <h4>🏡 Data Peternakan</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="farmName">Nama Peternakan</label>
+                    <input type="text" id="farmName" />
+                  </div>
+                  <div class="form-group">
+                    <label for="farmType">Jenis Peternakan</label>
+                    <select id="farmType">
+                      <option value="">Pilih Jenis</option>
+                      <option value="sapi">🐄 Peternakan Sapi</option>
+                      <option value="kambing">🐐 Peternakan Kambing</option>
+                      <option value="ayam">🐔 Peternakan Ayam</option>
+                      <option value="campuran">🐾 Peternakan Campuran</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="farmSize">Luas Lahan (hektar)</label>
+                    <input type="number" id="farmSize" step="0.1" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label for="capacity">Kapasitas Hewan</label>
+                    <input type="number" id="capacity" min="0" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="farmAddress">Alamat Peternakan</label>
+                  <textarea id="farmAddress" rows="3"></textarea>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h4">📋 Sertifikasi & Izin</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="businessLicense">Nomor Izin Usaha</label>
+                    <input type="text" id="businessLicense" />
+                  </div>
+                  <div class="form-group">
+                    <label for="healthCertificate">Sertifikat Kesehatan</label>
+                    <input type="text" id="healthCertificate" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h4>📊 Statistik Peternakan</h4>
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <h5">📊 Total Hewan</h5>
+                    <div class="stat-value" id="farmTotalAnimals">0</div>
+                  </div>
+                  <div class="stat-card">
+                    <h5">📈 Produksi Harian</h5>
+                    <div class="stat-value" id="farmDailyProduction">0 L</div>
+                  </div>
+                  <div class="stat-card">
+                    <h5">💰 Pendapatan Bulan Ini</h5>
+                    <div class="stat-value" id="farmMonthlyRevenue">Rp 0</div>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                💾 Simpan Informasi Peternakan
+              </button>
+            </form>
+          </div>
+
+          <!-- Settings Tab -->
+          <div id="settings" class="tab-content">
+            <h3">⚙️ Pengaturan Aplikasi</h3>
+            
+            <div class="settings-section">
+              <div class="setting-group">
+                <h4">🌍 Bahasa & Regional</h4>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="appLanguage">Bahasa Aplikasi</label>
+                    <select id="appLanguage">
+                      <option value="id">🇮🇩 Bahasa Indonesia</option>
+                      <option value="en">🇺🇸 English</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="timezone">Zona Waktu</label>
+                    <select id="timezone">
+                      <option value="Asia/Jakarta">WIB (UTC+7)</option>
+                      <option value="Asia/Makassar">WITA (UTC+8)</option>
+                      <option value="Asia/Jayapura">WIT (UTC+9)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="dateFormat">Format Tanggal</label>
+                    <select id="dateFormat">
+                      <option value="dd/mm/yyyy">DD/MM/YYYY</option>
+                      <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                      <option value="yyyy-mm-dd">YYYY-MM-DD</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="currency">Mata Uang</label>
+                    <select id="currency">
+                      <option value="IDR">IDR - Rupiah</option>
+                      <option value="USD">USD - Dollar</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setting-group">
+                <h4">🔔 Notifikasi</h4>
+                <div class="setting-item">
+                  <label class="switch">
+                    <input type="checkbox" id="pushNotifications" checked />
+                    <span class="slider"></span>
+                  </label>
+                  <div class="setting-info">
+                    <strong>Notifikasi Push</strong>
+                    <p>Terima notifikasi untuk peringatan penting</p>
+                  </div>
+                </div>
+
+                <div class="setting-item">
+                  <label class="switch">
+                    <input type="checkbox" id="emailNotifications" checked />
+                    <span class="slider"></span>
+                  </label>
+                  <div class="setting-info">
+                    <strong>Notifikasi Email</strong>
+                    <p>Terima email untuk laporan dan update</p>
+                  </div>
+                </div>
+
+                <div class="setting-item">
+                  <label class="switch">
+                    <input type="checkbox" id="healthAlerts" checked />
+                    <span class="slider"></span>
+                  </label>
+                  <div class="setting-info">
+                    <strong>Peringatan Kesehatan</strong>
+                    <p>Notifikasi untuk masalah kesehatan hewan</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setting-group">
+                <h4">📱 Tampilan</h4>
+                <div class="form-group">
+                  <label for="theme">Tema Aplikasi</label>
+                  <select id="theme">
+                    <option value="light">☀️ Terang</option>
+                    <option value="dark">🌙 Gelap</option>
+                    <option value="auto">🔄 Otomatis</option>
+                  </select>
+                </div>
+
+                <div class="setting-item">
+                  <label class="switch">
+                    <input type="checkbox" id="animations" checked />
+                    <span class="slider"></span>
+                  </label>
+                  <div class="setting-info">
+                    <strong>Animasi</strong>
+                    <p>Aktifkan animasi dan transisi</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setting-group">
+                <h4">💾 Data & Sinkronisasi</h4>
+                <div class="setting-item">
+                  <label class="switch">
+                    <input type="checkbox" id="autoSync" checked />
+                    <span class="slider"></span>
+                  </label>
+                  <div class="setting-info">
+                    <strong>Sinkronisasi Otomatis</strong>
+                    <p>Sinkronkan data secara otomatis</p>
+                  </div>
+                </div>
+
+                <div class="setting-item">
+                  <label class="switch">
+                    <input type="checkbox" id="offlineMode" />
+                    <span class="slider"></span>
+                  </label>
+                  <div class="setting-info">
+                    <strong>Mode Offline</strong>
+                    <p>Simpan data untuk akses offline</p>
+                  </div>
+                </div>
+
+                <div class="data-actions">
+                  <button class="btn btn-secondary" onclick="exportAllData()">
+                    📤 Export Semua Data
+                  </button>
+                  <button class="btn btn-warning" onclick="clearCache()">
+                    🧹 Bersihkan Cache
+                  </button>
+                </div>
+              </div>
+
+              <button class="btn btn-primary" onclick="saveSettings()">
+                💾 Simpan Pengaturan
+              </button>
+            </div>
+          </div>
+
+          <!-- Security Tab -->
+          <div id="security" class="tab-content">
+            <h3">🔒 Keamanan Akun</h3>
+            
+            <div class="security-section">
+              <div class="security-status">
+                <h4">🛡️ Status Keamanan</h4>
+                <div class="security-score">
+                  <div class="score-circle">
+                    <span id="securityScore">85</span>%
+                  </div>
+                  <div class="score-info">
+                    <p>Keamanan akun Anda <strong>Baik</strong></p>
+                    <p class="score-tip">Aktifkan 2FA untuk meningkatkan keamanan</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="security-settings">
+                <div class="setting-group">
+                  <h4">🔑 Password</h4>
+                  <form id="changePasswordForm">
+                    <div class="form-group">
+                      <label for="currentPassword">Password Saat Ini</label>
+                      <input type="password" id="currentPassword" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="newPassword">Password Baru</label>
+                      <input type="password" id="newPassword" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="confirmPassword">Konfirmasi Password Baru</label>
+                      <input type="password" id="confirmPassword" required />
+                    </div>
+                    <div class="password-strength" id="passwordStrength"></div>
+                    <button type="submit" class="btn btn-primary">
+                      🔒 Ubah Password
+                    </button>
+                  </form>
+                </div>
+
+                <div class="setting-group">
+                  <h4">📱 Autentikasi Dua Faktor (2FA)</h4>
+                  <div class="setting-item">
+                    <label class="switch">
+                      <input type="checkbox" id="twoFactorAuth" />
+                      <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                      <strong>2FA SMS</strong>
+                      <p>Verifikasi melalui SMS</p>
+                    </div>
+                  </div>
+                  
+                  <div class="setting-item">
+                    <label class="switch">
+                      <input type="checkbox" id="authenticatorApp" />
+                      <span class="slider"></span>
+                    </label>
+                    <div class="setting-info">
+                      <strong>Aplikasi Authenticator</strong>
+                      <p>Google Authenticator atau aplikasi serupa</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="setting-group">
+                  <h4">📊 Aktivitas Login</h4>
+                  <div class="login-history">
+                    <div class="history-item">
+                      <div class="history-info">
+                        <strong>Windows PC</strong>
+                        <p>Jakarta, Indonesia • 2 jam yang lalu</p>
+                      </div>
+                      <span class="status-current">Saat ini</span>
+                    </div>
+                    <div class="history-item">
+                      <div class="history-info">
+                        <strong>Android Phone</strong>
+                        <p>Jakarta, Indonesia • 1 hari yang lalu</p>
+                      </div>
+                      <button class="btn btn-outline btn-sm">Logout</button>
+                    </div>
+                  </div>
+                  
+                  <button class="btn btn-warning" onclick="logoutAllDevices()">
+                    🚪 Logout Semua Perangkat
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- About Tab -->
+          <div id="about" class="tab-content">
+            <h3">ℹ️ Tentang Aplikasi</h3>
+            
+            <div class="about-section">
+              <div class="app-info">
+                <div class="app-icon">🐾</div>
+                <div class="app-details">
+                  <h4">Pendataan Hewan PWA</h4>
+                  <p>Versi 1.0.0 (Build 2025.01.03)</p>
+                  <p>Progressive Web Application untuk manajemen peternakan</p>
+                </div>
+              </div>
+
+              <div class="about-content">
+                <div class="info-group">
+                  <h4">📋 Fitur Utama</h4>
+                  <ul>
+                    <li>📊 Dashboard analitik real-time</li>
+                    <li>📝 Pendataan hewan komprehensif</li>
+                    <li">🏥 Manajemen kesehatan hewan</li>
+                    <li>📈 Monitoring pertumbuhan</li>
+                    <li>🌾 Tracking produksi dan panen</li>
+                    <li">📋 Evaluasi kinerja peternakan</li>
+                    <li>🔍 Pencarian dan filter canggih</li>
+                    <li">📱 Support offline mode</li>
+                  </ul>
+                </div>
+
+                <div class="info-group">
+                  <h4">🛠️ Teknologi</h4>
+                  <ul>
+                    <li">Progressive Web App (PWA)</li>
+                    <li>HTML5, CSS3, JavaScript</li>
+                    <li">Service Worker untuk offline support</li>
+                    <li>Chart.js untuk visualisasi data</li>
+                    <li">LocalStorage untuk penyimpanan data</li>
+                  </ul>
+                </div>
+
+                <div class="info-group">
+                  <h4">📞 Dukungan</h4>
+                  <p>📧 Email: support@pendataanhewan.com</p>
+                  <p>📱 WhatsApp: +62 812-3456-7890</p>
+                  <p>🌐 Website: www.pendataanhewan.com</p>
+                </div>
+
+                <div class="info-group">
+                  <h4">⚖️ Legal</h4>
+                  <div class="legal-links">
+                    <a href="#" class="link">📄 Syarat & Ketentuan</a>
+                    <a href="#" class="link">🔒 Kebijakan Privasi</a>
+                    <a href="#" class="link">📋 Lisensi</a>
+                  </div>
+                </div>
+
+                <div class="app-actions">
+                  <button class="btn btn-info" onclick="checkUpdates()">
+                    ⬇️ Cek Update
+                  </button>
+                  <button class="btn btn-secondary" onclick="showHelp()">
+                    ❓ Bantuan
+                  </button>
+                  <button class="btn btn-outline" onclick="sendFeedback()">
+                    💬 Kirim Feedback
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logout Section -->
+        <div class="logout-section">
+          <button class="btn btn-danger btn-large" onclick="confirmLogout()">
+            🚪 Logout dari Akun
+          </button>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Pendataan Hewan PWA. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/error-handler.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobileNav');
+        if (mobileNav) {
+          mobileNav.classList.toggle('active');
+        }
+      }
+
+      // Tab functionality
+      function showTab(tabName) {
+        // Hide all tab contents
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        // Remove active class from all buttons
+        const tabButtons = document.querySelectorAll('.tab-button');
+        tabButtons.forEach(button => button.classList.remove('active'));
+        
+        // Show selected tab content
+        const selectedTab = document.getElementById(tabName);
+        if (selectedTab) {
+          selectedTab.classList.add('active');
+        }
+        
+        // Add active class to clicked button
+        event.target.classList.add('active');
+      }
+
+      // Load user profile data
+      function loadUserProfile() {
+        try {
+          const user = auth.getCurrentUser();
+          if (user) {
+            // Fill profile form with user data
+            document.getElementById('fullName').value = user.name || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = user.phone || '';
+            
+            // Update profile photo
+            if (user.photo) {
+              document.getElementById('profilePhoto').src = user.photo;
+              document.getElementById('profilePhoto').style.display = 'block';
+              document.getElementById('avatarPlaceholder').style.display = 'none';
+            }
+            
+            // Update join date and last login
+            document.getElementById('joinDate').textContent = user.joinDate || '-';
+            document.getElementById('lastLogin').textContent = user.lastLogin || '-';
+          }
+        } catch (error) {
+          console.error('Error loading user profile:', error);
+        }
+      }
+
+      // Handle photo upload
+      function handlePhotoUpload() {
+        const fileInput = document.getElementById('photoInput');
+        const file = fileInput.files[0];
+        
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const photo = document.getElementById('profilePhoto');
+            const placeholder = document.getElementById('avatarPlaceholder');
+            
+            photo.src = e.target.result;
+            photo.style.display = 'block';
+            placeholder.style.display = 'none';
+            
+            // Save to user profile
+            const user = auth.getCurrentUser();
+            if (user) {
+              user.photo = e.target.result;
+              auth.updateUser(user);
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      // Save profile changes
+      document.getElementById('profileForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        try {
+          const profileData = {
+            name: document.getElementById('fullName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            birthDate: document.getElementById('birthDate').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            province: document.getElementById('province').value,
+            postalCode: document.getElementById('postalCode').value,
+            country: document.getElementById('country').value
+          };
+          
+          // Update user profile
+          auth.updateUserProfile(profileData);
+          showSuccess('Profil berhasil diperbarui');
+        } catch (error) {
+          console.error('Error updating profile:', error);
+          showError('Gagal memperbarui profil');
+        }
+      });
+
+      // Save farm information
+      document.getElementById('farmForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        try {
+          const farmData = {
+            name: document.getElementById('farmName').value,
+            type: document.getElementById('farmType').value,
+            size: document.getElementById('farmSize').value,
+            capacity: document.getElementById('capacity').value,
+            address: document.getElementById('farmAddress').value,
+            businessLicense: document.getElementById('businessLicense').value,
+            healthCertificate: document.getElementById('healthCertificate').value
+          };
+          
+          // Save farm information
+          localStorage.setItem('farmInfo', JSON.stringify(farmData));
+          showSuccess('Informasi peternakan berhasil disimpan');
+        } catch (error) {
+          console.error('Error saving farm info:', error);
+          showError('Gagal menyimpan informasi peternakan');
+        }
+      });
+
+      // Change password
+      document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (newPassword !== confirmPassword) {
+          showError('Konfirmasi password tidak cocok');
+          return;
+        }
+        
+        if (newPassword.length < 6) {
+          showError('Password minimal 6 karakter');
+          return;
+        }
+        
+        try {
+          // Change password logic here
+          auth.changePassword(currentPassword, newPassword);
+          showSuccess('Password berhasil diubah');
+          
+          // Clear form
+          document.getElementById('changePasswordForm').reset();
+        } catch (error) {
+          console.error('Error changing password:', error);
+          showError('Gagal mengubah password');
+        }
+      });
+
+      // Save settings
+      function saveSettings() {
+        try {
+          const settings = {
+            language: document.getElementById('appLanguage').value,
+            timezone: document.getElementById('timezone').value,
+            dateFormat: document.getElementById('dateFormat').value,
+            currency: document.getElementById('currency').value,
+            theme: document.getElementById('theme').value,
+            pushNotifications: document.getElementById('pushNotifications').checked,
+            emailNotifications: document.getElementById('emailNotifications').checked,
+            healthAlerts: document.getElementById('healthAlerts').checked,
+            animations: document.getElementById('animations').checked,
+            autoSync: document.getElementById('autoSync').checked,
+            offlineMode: document.getElementById('offlineMode').checked
+          };
+          
+          localStorage.setItem('appSettings', JSON.stringify(settings));
+          showSuccess('Pengaturan berhasil disimpan');
+          
+          // Apply theme change immediately
+          applyTheme(settings.theme);
+        } catch (error) {
+          console.error('Error saving settings:', error);
+          showError('Gagal menyimpan pengaturan');
+        }
+      }
+
+      // Apply theme
+      function applyTheme(theme) {
+        const body = document.body;
+        body.classList.remove('theme-light', 'theme-dark');
+        
+        if (theme === 'dark') {
+          body.classList.add('theme-dark');
+        } else if (theme === 'light') {
+          body.classList.add('theme-light');
+        } else {
+          // Auto theme based on system preference
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            body.classList.add('theme-dark');
+          } else {
+            body.classList.add('theme-light');
+          }
+        }
+      }
+
+      // Logout confirmation
+      function confirmLogout() {
+        if (confirm('Apakah Anda yakin ingin logout?')) {
+          try {
+            auth.logout();
+            window.location.href = '../index.html';
+          } catch (error) {
+            console.error('Logout error:', error);
+            showError('Gagal logout');
+          }
+        }
+      }
+
+      // Utility functions
+      function exportAllData() {
+        console.log('Exporting all data...');
+        showInfo('Fitur export akan segera tersedia');
+      }
+
+      function clearCache() {
+        if (confirm('Hapus semua cache? Data offline akan hilang.')) {
+          localStorage.clear();
+          if ('caches' in window) {
+            caches.keys().then(names => {
+              names.forEach(name => caches.delete(name));
+            });
+          }
+          showSuccess('Cache berhasil dibersihkan');
+        }
+      }
+
+      function checkUpdates() {
+        showInfo('Aplikasi sudah versi terbaru');
+      }
+
+      function showHelp() {
+        showInfo('Fitur bantuan akan segera tersedia');
+      }
+
+      function sendFeedback() {
+        showInfo('Fitur feedback akan segera tersedia');
+      }
+
+      function logoutAllDevices() {
+        if (confirm('Logout dari semua perangkat?')) {
+          showSuccess('Berhasil logout dari semua perangkat');
+        }
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const mobileNav = document.getElementById('mobileNav');
+        const menuBtn = document.querySelector('.btn-menu');
+        
+        if (mobileNav && menuBtn && !mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+          mobileNav.classList.remove('active');
+        }
+      });
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication
+        if (typeof auth !== 'undefined' && !auth.requireAuth()) {
+          return; // Will redirect to login if not authenticated
+        }
+        
+        loadUserProfile();
+        
+        // Load saved settings
+        try {
+          const savedSettings = localStorage.getItem('appSettings');
+          if (savedSettings) {
+            const settings = JSON.parse(savedSettings);
+            
+            // Apply saved settings to form
+            Object.keys(settings).forEach(key => {
+              const element = document.getElementById(key);
+              if (element) {
+                if (element.type === 'checkbox') {
+                  element.checked = settings[key];
+                } else {
+                  element.value = settings[key];
+                }
+              }
+            });
+            
+            // Apply theme
+            applyTheme(settings.theme);
+          }
+        } catch (error) {
+          console.error('Error loading settings:', error);
+        }
+        
+        // Load farm info
+        try {
+          const savedFarmInfo = localStorage.getItem('farmInfo');
+          if (savedFarmInfo) {
+            const farmInfo = JSON.parse(savedFarmInfo);
+            
+            Object.keys(farmInfo).forEach(key => {
+              const element = document.getElementById('farm' + key.charAt(0).toUpperCase() + key.slice(1));
+              if (element) {
+                element.value = farmInfo[key];
+              }
+            });
+          }
+        } catch (error) {
+          console.error('Error loading farm info:', error);
+        }
+      });
+    </script>
+  </body>
+</html>

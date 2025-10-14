@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Hewan - Pendataan Hewan PWA</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="../manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Pendataan Hewan" />
+    <meta name="theme-color" content="#4F46E5" />
+    <meta name="description" content="Daftar lengkap semua hewan yang terdaftar dalam sistem" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header with Navigation -->
+      <div class="header">
+        <div class="header-content">
+          <div class="header-title">
+            <h1">🐾 Pendataan Hewan</h1>
+            <p>Daftar Lengkap Hewan</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-menu" onclick="toggleMobileMenu()">☰</button>
+            <a href="profil.html" class="btn btn-info">👤 Profil</a>
+            <a href="../index.html" class="btn btn-secondary">🏠 Home</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav">
+        <div class="nav-container">
+          <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="nav-link active">📄 Daftar</a>
+          <a href="profil.html" class="nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-content">
+          <a href="dashboard.html" class="mobile-nav-link">📊 Dashboard</a>
+          <a href="pendataan.html" class="mobile-nav-link">📝 Pendataan</a>
+          <a href="perawatan.html" class="mobile-nav-link">🏥 Perawatan</a>
+          <a href="monitoring.html" class="mobile-nav-link">📈 Monitoring</a>
+          <a href="panen.html" class="mobile-nav-link">🌾 Panen</a>
+          <a href="evaluasi.html" class="mobile-nav-link">📋 Evaluasi</a>
+          <a href="search.html" class="mobile-nav-link">🔍 Pencarian</a>
+          <a href="list.html" class="mobile-nav-link active">📄 Daftar</a>
+          <a href="profil.html" class="mobile-nav-link">👤 Profil</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="module-header">
+          <h2">📄 Daftar Lengkap Hewan</h2>
+          <p>Lihat dan kelola semua hewan yang terdaftar dalam sistem</p>
+        </div>
+
+        <div class="list-section">
+          <!-- List Controls -->
+          <div class="list-controls">
+            <div class="list-actions">
+              <div class="action-group">
+                <button class="btn btn-primary" onclick="addNewAnimal()">
+                  ➕ Tambah Hewan Baru
+                </button>
+                <button class="btn btn-info" onclick="refreshList()">
+                  🔄 Refresh
+                </button>
+              </div>
+              
+              <div class="action-group">
+                <button class="btn btn-secondary" onclick="exportList()">
+                  📤 Export Data
+                </button>
+                <button class="btn btn-warning" onclick="importData()">
+                  📥 Import Data
+                </button>
+              </div>
+            </div>
+
+            <div class="list-settings">
+              <div class="setting-group">
+                <label for="itemsPerPage">Items per halaman:</label>
+                <select id="itemsPerPage" onchange="changeItemsPerPage()">
+                  <option value="10">10</option>
+                  <option value="25" selected>25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              
+              <div class="setting-group">
+                <label for="sortBy">Urutkan berdasarkan:</label>
+                <select id="sortBy" onchange="sortList()">
+                  <option value="name">Nama</option>
+                  <option value="id">ID Hewan</option>
+                  <option value="species">Spesies</option>
+                  <option value="age">Umur</option>
+                  <option value="dateAdded">Tanggal Ditambah</option>
+                </select>
+              </div>
+              
+              <div class="setting-group">
+                <label for="sortOrder">Urutan:</label>
+                <select id="sortOrder" onchange="sortList()">
+                  <option value="asc">A-Z / Terkecil</option>
+                  <option value="desc">Z-A / Terbesar</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="list-stats">
+            <div class="stats-grid">
+              <div class="stat-item">
+                <h4">📊 Total Hewan</h4>
+                <div class="stat-value" id="totalAnimalsCount">0</div>
+              </div>
+              <div class="stat-item">
+                <h4>🐄 Sapi</h4>
+                <div class="stat-value" id="cattleCount">0</div>
+              </div>
+              <div class="stat-item">
+                <h4">🐐 Kambing</h4>
+                <div class="stat-value" id="goatCount">0</div>
+              </div>
+              <div class="stat-item">
+                <h4>🐔 Ayam</h4>
+                <div class="stat-value" id="chickenCount">0</div>
+              </div>
+              <div class="stat-item">
+                <h4">💚 Sehat</h4>
+                <div class="stat-value" id="healthyCount">0</div>
+              </div>
+              <div class="stat-item">
+                <h4">📈 Produktif</h4>
+                <div class="stat-value" id="productiveCount">0</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Animals List Table -->
+          <div class="list-container">
+            <div class="table-responsive">
+              <table class="animals-table" id="animalsTable">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" />
+                    </th>
+                    <th>ID</th>
+                    <th>Foto</th>
+                    <th>Nama</th>
+                    <th>Spesies</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Umur</th>
+                    <th>Status</th>
+                    <th">Produksi</th>
+                    <th>Kesehatan</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="animalsTableBody">
+                  <!-- Table rows will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination-container">
+            <div class="pagination-info">
+              <span id="paginationInfo">Menampilkan 0 - 0 dari 0 data</span>
+            </div>
+            <div class="pagination-controls" id="paginationControls">
+              <!-- Pagination buttons will be generated here -->
+            </div>
+          </div>
+
+          <!-- Bulk Actions -->
+          <div class="bulk-actions" id="bulkActions" style="display: none;">
+            <div class="bulk-actions-content">
+              <span class="selected-count" id="selectedCount">0 item terpilih</span>
+              <div class="bulk-buttons">
+                <button class="btn btn-info" onclick="bulkEdit()">
+                  ✏️ Edit Massal
+                </button>
+                <button class="btn btn-success" onclick="bulkHealthCheck()">
+                  🏥 Cek Kesehatan
+                </button>
+                <button class="btn btn-warning" onclick="bulkExport()">
+                  📤 Export Terpilih
+                </button>
+                <button class="btn btn-danger" onclick="bulkDelete()">
+                  🗑️ Hapus Terpilih
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Animal Detail Modal -->
+        <div id="animalDetailModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 id="modalTitle">Detail Hewan</h3>
+              <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+              <!-- Animal details will be shown here -->
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" onclick="editAnimal()">✏️ Edit</button>
+              <button class="btn btn-secondary" onclick="closeModal()">Tutup</button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Pendataan Hewan PWA. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+    <script src="../assets/js/error-handler.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script>
+      let allAnimals = [];
+      let filteredAnimals = [];
+      let currentPage = 1;
+      let itemsPerPage = 25;
+      let selectedAnimals = [];
+
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        const mobileNav = document.getElementById('mobileNav');
+        if (mobileNav) {
+          mobileNav.classList.toggle('active');
+        }
+      }
+
+      // Load and display animals list
+      function loadAnimalsList() {
+        try {
+          // Load from localStorage or API
+          const stored = localStorage.getItem('animals');
+          allAnimals = stored ? JSON.parse(stored) : [];
+          filteredAnimals = [...allAnimals];
+          
+          updateStats();
+          renderTable();
+          updatePagination();
+        } catch (error) {
+          console.error('Error loading animals list:', error);
+          showError('Gagal memuat daftar hewan');
+        }
+      }
+
+      // Update statistics
+      function updateStats() {
+        const stats = {
+          total: allAnimals.length,
+          cattle: allAnimals.filter(a => a.species === 'sapi').length,
+          goat: allAnimals.filter(a => a.species === 'kambing').length,
+          chicken: allAnimals.filter(a => a.species === 'ayam').length,
+          healthy: allAnimals.filter(a => a.healthStatus === 'sehat').length,
+          productive: allAnimals.filter(a => a.production > 0).length
+        };
+
+        document.getElementById('totalAnimalsCount').textContent = stats.total;
+        document.getElementById('cattleCount').textContent = stats.cattle;
+        document.getElementById('goatCount').textContent = stats.goat;
+        document.getElementById('chickenCount').textContent = stats.chicken;
+        document.getElementById('healthyCount').textContent = stats.healthy;
+        document.getElementById('productiveCount').textContent = stats.productive;
+      }
+
+      // Render table
+      function renderTable() {
+        const tbody = document.getElementById('animalsTableBody');
+        if (!tbody) return;
+
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageAnimals = filteredAnimals.slice(start, end);
+
+        if (pageAnimals.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="11" class="no-data">Tidak ada data hewan</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = pageAnimals.map(animal => `
+          <tr>
+            <td>
+              <input type="checkbox" value="${animal.id}" onchange="toggleAnimalSelection('${animal.id}')" />
+            </td>
+            <td>${animal.id || '-'}</td>
+            <td>
+              <div class="animal-photo">
+                ${animal.photo ? `<img src="${animal.photo}" alt="Foto ${animal.name}" />` : '📷'}
+              </div>
+            </td>
+            <td>
+              <strong>${animal.name || 'Tidak ada nama'}</strong>
+              <div class="animal-tag">${animal.tag || '-'}</div>
+            </td>
+            <td>
+              <span class="species-badge">${getSpeciesIcon(animal.species)} ${animal.species}</span>
+            </td>
+            <td>${getGenderIcon(animal.gender)} ${animal.gender}</td>
+            <td>${calculateAge(animal.birthDate)} bulan</td>
+            <td>
+              <span class="status-badge status-${animal.status}">${animal.status}</span>
+            </td>
+            <td>${animal.production || 0} ${animal.productionUnit || 'unit'}/hari</td>
+            <td>
+              <span class="health-badge health-${animal.healthStatus}">${getHealthIcon(animal.healthStatus)} ${animal.healthStatus}</span>
+            </td>
+            <td class="actions">
+              <button class="btn-icon" onclick="viewAnimalDetail('${animal.id}')" title="Lihat Detail">👁️</button>
+              <button class="btn-icon" onclick="editAnimal('${animal.id}')" title="Edit">✏️</button>
+              <button class="btn-icon" onclick="deleteAnimal('${animal.id}')" title="Hapus">🗑️</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Helper functions
+      function getSpeciesIcon(species) {
+        const icons = {
+          'sapi': '🐄',
+          'kambing': '🐐',
+          'domba': '🐑',
+          'ayam': '🐔',
+          'bebek': '🦆',
+          'kuda': '🐎',
+          'kerbau': '🐃'
+        };
+        return icons[species] || '🐾';
+      }
+
+      function getGenderIcon(gender) {
+        return gender === 'jantan' ? '♂️' : gender === 'betina' ? '♀️' : '';
+      }
+
+      function getHealthIcon(status) {
+        const icons = {
+          'sehat': '💚',
+          'sakit': '🔴',
+          'perawatan': '🟡',
+          'karantina': '🔒'
+        };
+        return icons[status] || '❓';
+      }
+
+      function calculateAge(birthDate) {
+        if (!birthDate) return 0;
+        const birth = new Date(birthDate);
+        const today = new Date();
+        const months = (today.getFullYear() - birth.getFullYear()) * 12 + (today.getMonth() - birth.getMonth());
+        return Math.max(0, months);
+      }
+
+      // Selection functions
+      function toggleSelectAll() {
+        const selectAll = document.getElementById('selectAll');
+        const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        
+        checkboxes.forEach(cb => {
+          cb.checked = selectAll.checked;
+          if (selectAll.checked) {
+            if (!selectedAnimals.includes(cb.value)) {
+              selectedAnimals.push(cb.value);
+            }
+          } else {
+            selectedAnimals = selectedAnimals.filter(id => id !== cb.value);
+          }
+        });
+        
+        updateBulkActions();
+      }
+
+      function toggleAnimalSelection(animalId) {
+        if (selectedAnimals.includes(animalId)) {
+          selectedAnimals = selectedAnimals.filter(id => id !== animalId);
+        } else {
+          selectedAnimals.push(animalId);
+        }
+        updateBulkActions();
+      }
+
+      function updateBulkActions() {
+        const bulkActions = document.getElementById('bulkActions');
+        const selectedCount = document.getElementById('selectedCount');
+        
+        if (selectedAnimals.length > 0) {
+          bulkActions.style.display = 'block';
+          selectedCount.textContent = `${selectedAnimals.length} item terpilih`;
+        } else {
+          bulkActions.style.display = 'none';
+        }
+      }
+
+      // Pagination
+      function updatePagination() {
+        const totalPages = Math.ceil(filteredAnimals.length / itemsPerPage);
+        const paginationInfo = document.getElementById('paginationInfo');
+        const paginationControls = document.getElementById('paginationControls');
+        
+        const start = (currentPage - 1) * itemsPerPage + 1;
+        const end = Math.min(currentPage * itemsPerPage, filteredAnimals.length);
+        
+        paginationInfo.textContent = `Menampilkan ${start} - ${end} dari ${filteredAnimals.length} data`;
+        
+        // Generate pagination buttons
+        let paginationHTML = '';
+        
+        if (currentPage > 1) {
+          paginationHTML += `<button class="btn btn-outline" onclick="goToPage(${currentPage - 1})">‹ Prev</button>`;
+        }
+        
+        for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+          paginationHTML += `<button class="btn ${i === currentPage ? 'btn-primary' : 'btn-outline'}" onclick="goToPage(${i})">${i}</button>`;
+        }
+        
+        if (currentPage < totalPages) {
+          paginationHTML += `<button class="btn btn-outline" onclick="goToPage(${currentPage + 1})">Next ›</button>`;
+        }
+        
+        paginationControls.innerHTML = paginationHTML;
+      }
+
+      function goToPage(page) {
+        currentPage = page;
+        renderTable();
+        updatePagination();
+      }
+
+      // Sort and filter functions
+      function sortList() {
+        const sortBy = document.getElementById('sortBy').value;
+        const sortOrder = document.getElementById('sortOrder').value;
+        
+        filteredAnimals.sort((a, b) => {
+          let aVal = a[sortBy] || '';
+          let bVal = b[sortBy] || '';
+          
+          if (sortBy === 'age') {
+            aVal = calculateAge(a.birthDate);
+            bVal = calculateAge(b.birthDate);
+          }
+          
+          if (typeof aVal === 'string') {
+            aVal = aVal.toLowerCase();
+            bVal = bVal.toLowerCase();
+          }
+          
+          if (sortOrder === 'desc') {
+            return aVal < bVal ? 1 : -1;
+          } else {
+            return aVal > bVal ? 1 : -1;
+          }
+        });
+        
+        currentPage = 1;
+        renderTable();
+        updatePagination();
+      }
+
+      function changeItemsPerPage() {
+        itemsPerPage = parseInt(document.getElementById('itemsPerPage').value);
+        currentPage = 1;
+        renderTable();
+        updatePagination();
+      }
+
+      // Modal functions
+      function viewAnimalDetail(animalId) {
+        const animal = allAnimals.find(a => a.id === animalId);
+        if (!animal) return;
+        
+        const modal = document.getElementById('animalDetailModal');
+        const modalBody = document.getElementById('modalBody');
+        
+        modalBody.innerHTML = `
+          <div class="animal-detail">
+            <div class="detail-section">
+              <h4>📋 Informasi Dasar</h4>
+              <p><strong>ID:</strong> ${animal.id}</p>
+              <p><strong>Nama:</strong> ${animal.name}</p>
+              <p><strong>Tag:</strong> ${animal.tag || '-'}</p>
+              <p><strong>Spesies:</strong> ${getSpeciesIcon(animal.species)} ${animal.species}</p>
+              <p><strong>Jenis Kelamin:</strong> ${getGenderIcon(animal.gender)} ${animal.gender}</p>
+              <p><strong>Tanggal Lahir:</strong> ${animal.birthDate || '-'}</p>
+              <p><strong>Umur:</strong> ${calculateAge(animal.birthDate)} bulan</p>
+            </div>
+            
+            <div class="detail-section">
+              <h4>🏥 Status Kesehatan</h4>
+              <p><strong>Status:</strong> ${getHealthIcon(animal.healthStatus)} ${animal.healthStatus}</p>
+              <p><strong>Berat:</strong> ${animal.weight || '-'} kg</p>
+              <p><strong>Vaksinasi:</strong> ${animal.vaccination || 'Belum'}</p>
+            </div>
+            
+            <div class="detail-section">
+              <h4>📈 Produktivitas</h4>
+              <p><strong>Produksi:</strong> ${animal.production || 0} ${animal.productionUnit || 'unit'}/hari</p>
+              <p><strong>Status:</strong> ${animal.status}</p>
+            </div>
+          </div>
+        `;
+        
+        modal.style.display = 'block';
+      }
+
+      function closeModal() {
+        const modal = document.getElementById('animalDetailModal');
+        modal.style.display = 'none';
+      }
+
+      // Action functions
+      function addNewAnimal() {
+        window.location.href = 'pendataan.html';
+      }
+
+      function refreshList() {
+        loadAnimalsList();
+      }
+
+      function exportList() {
+        // Implementation for export functionality
+        console.log('Exporting animal list...');
+      }
+
+      function importData() {
+        // Implementation for import functionality
+        console.log('Importing data...');
+      }
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(event) {
+        const mobileNav = document.getElementById('mobileNav');
+        const menuBtn = document.querySelector('.btn-menu');
+        
+        if (mobileNav && menuBtn && !mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+          mobileNav.classList.remove('active');
+        }
+      });
+
+      // Close modal when clicking outside
+      window.onclick = function(event) {
+        const modal = document.getElementById('animalDetailModal');
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      };
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check authentication
+        if (typeof auth !== 'undefined' && !auth.requireAuth()) {
+          return; // Will redirect to login if not authenticated
+        }
+        
+        loadAnimalsList();
+      });
+    </script>
+  </body>
+</html>
